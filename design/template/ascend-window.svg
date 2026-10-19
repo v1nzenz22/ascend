@@ -6,15 +6,18 @@
     Sizes follow design/tokens.json: tab 34, toolbar 44, side rail 48.
   -->
   <defs>
-    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#74E3C2"/>
-      <stop offset="0.5" stop-color="#2BB4C8"/>
-      <stop offset="1" stop-color="#2275D6"/>
+    <linearGradient id="brand" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#9BE8CF"/>
+      <stop offset="0.55" stop-color="#5CC4CF"/>
+      <stop offset="1" stop-color="#3A82D6"/>
     </linearGradient>
-    <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#48D3AE"/>
-      <stop offset="1" stop-color="#2275D6"/>
-    </linearGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+      <feComponentTransfer in="mono" result="soft"><feFuncA type="linear" slope="0" intercept="0.14"/></feComponentTransfer>
+      <feComposite in="soft" in2="SourceGraphic" operator="in" result="g"/>
+      <feBlend in="SourceGraphic" in2="g" mode="overlay"/>
+    </filter>
     <linearGradient id="canvas" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#DDF3EE"/>
       <stop offset="1" stop-color="#D6E6F7"/>
@@ -42,10 +45,7 @@
       </g>
       <g id="tab-active">
         <path d="M180 86 V60 a8 8 0 0 1 8 -8 H392 a8 8 0 0 1 8 8 V86 Z" fill="#FFFFFF"/>
-        <g transform="translate(194 61)">
-          <polyline points="3,9 8,4 13,9" fill="none" stroke="url(#markGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-          <polyline points="1,15 8,8 15,15" fill="none" stroke="url(#markGrad)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </g>
+        <text x="202" y="76" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="20" fill="#2A8FB0">a</text>
         <text x="218" y="74" font-size="13" font-weight="500" fill="#141E24">New Tab</text>
         <path d="M380 65 l8 8 M388 65 l-8 8" stroke="#56676F" stroke-width="1.6" stroke-linecap="round"/>
       </g>
@@ -127,11 +127,11 @@
     <!-- Content: start page -->
     <g id="content-start-page">
       <rect x="350" y="131" width="1050" height="729" fill="#FBFDFD"/>
-      <g id="start-mark" transform="translate(831 250) scale(0.17)">
-        <polyline points="166,206 256,116 346,206" fill="none" stroke="url(#markGrad)" stroke-width="52" stroke-opacity="0.75" stroke-linecap="round" stroke-linejoin="round"/>
-        <polyline points="114,376 256,234 398,376" fill="none" stroke="url(#markGrad)" stroke-width="68" stroke-linecap="round" stroke-linejoin="round"/>
+      <g id="start-mark">
+        <g filter="url(#grain)"><rect x="839" y="232" width="72" height="72" rx="17" fill="url(#brand)"/></g>
+        <text x="875" y="286" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="52" fill="#FBFAF6">a</text>
       </g>
-      <text x="875" y="364" font-size="28" font-weight="600" fill="#141E24" text-anchor="middle" letter-spacing="-0.5">ascend</text>
+      <text x="875" y="362" font-family="'Times New Roman', Times, serif" font-size="38" fill="#141E24" text-anchor="middle">ascend</text>
       <text x="875" y="390" font-size="13" fill="#56676F" text-anchor="middle">Private by default. Nothing leaves this Mac unless you ask.</text>
 
       <g id="start-address">

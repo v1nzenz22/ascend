@@ -3,25 +3,31 @@
   <!-- Colors, gradient, type scale and core components. Values match design/tokens.json. -->
   <defs>
     <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#74E3C2"/>
-      <stop offset="0.5" stop-color="#2BB4C8"/>
-      <stop offset="1" stop-color="#2275D6"/>
+      <stop offset="0" stop-color="#9BE8CF"/>
+      <stop offset="0.55" stop-color="#5CC4CF"/>
+      <stop offset="1" stop-color="#3A82D6"/>
     </linearGradient>
-    <linearGradient id="brandDiag" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#74E3C2"/>
-      <stop offset="0.5" stop-color="#2BB4C8"/>
-      <stop offset="1" stop-color="#2275D6"/>
+    <linearGradient id="brandDiag" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#9BE8CF"/>
+      <stop offset="0.55" stop-color="#5CC4CF"/>
+      <stop offset="1" stop-color="#3A82D6"/>
     </linearGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+      <feComponentTransfer in="mono" result="soft"><feFuncA type="linear" slope="0" intercept="0.14"/></feComponentTransfer>
+      <feComposite in="soft" in2="SourceGraphic" operator="in" result="g"/>
+      <feBlend in="SourceGraphic" in2="g" mode="overlay"/>
+    </filter>
   </defs>
 
   <rect width="1440" height="1000" fill="#FFFFFF"/>
 
   <g id="header">
-    <rect x="64" y="56" width="56" height="56" rx="13" fill="url(#brandDiag)"/>
-    <polyline points="80.5,82 92,70.5 103.5,82" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-opacity="0.72" stroke-linecap="round" stroke-linejoin="round"/>
-    <polyline points="76,99 92,83 108,99" fill="none" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="140" y="82" font-size="28" font-weight="600" fill="#141E24" letter-spacing="-0.5">ascend</text>
-    <text x="140" y="106" font-size="13" fill="#56676F">Style guide · v0.1 · mint → blue</text>
+    <g filter="url(#grain)"><rect x="64" y="56" width="56" height="56" rx="13" fill="url(#brandDiag)"/></g>
+    <text x="92" y="98" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="40" fill="#FBFAF6">a</text>
+    <text x="140" y="86" font-family="'Times New Roman', Times, serif" font-size="34" fill="#141E24">ascend</text>
+    <text x="140" y="108" font-size="13" fill="#56676F">Style guide · v0.2 · Times “a”, mint → blue, grain</text>
   </g>
 
   <!-- Color ramps -->
@@ -62,17 +68,17 @@
       <rect x="1064" width="140" height="64" rx="8" fill="#0C1418"/><text x="1074" y="82" fill="#25333A">950 #0C1418 · dark bg</text>
     </g>
 
-    <text x="64" y="564" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">BRAND GRADIENT · 135°</text>
-    <rect x="64" y="576" width="1204" height="48" rx="12" fill="url(#brand)"/>
-    <text x="80" y="606" font-size="12" font-weight="500" fill="#127862">#74E3C2</text>
-    <text x="666" y="606" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle">#2BB4C8</text>
-    <text x="1252" y="606" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="end">#2275D6</text>
+    <text x="64" y="564" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">BRAND GRADIENT · WITH GRAIN</text>
+    <g filter="url(#grain)"><rect x="64" y="576" width="1204" height="48" rx="12" fill="url(#brand)"/></g>
+    <text x="80" y="606" font-size="12" font-weight="500" fill="#127862">#9BE8CF</text>
+    <text x="666" y="606" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle">#5CC4CF</text>
+    <text x="1252" y="606" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="end">#3A82D6</text>
   </g>
 
   <!-- Typography -->
   <g id="typography" fill="#141E24">
-    <text x="64" y="680" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">TYPE · SF PRO (SYSTEM FONT, NO DOWNLOAD)</text>
-    <text x="64" y="720" font-size="28" font-weight="600" letter-spacing="-0.5">Title 28 / semibold</text>
+    <text x="64" y="680" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">TYPE · SF PRO UI, TIMES NEW ROMAN DISPLAY (SYSTEM FONTS)</text>
+    <text x="64" y="722" font-family="'Times New Roman', Times, serif" font-size="34">Display 34 / Times New Roman</text>
     <text x="64" y="754" font-size="20" font-weight="600">Heading 20 / semibold</text>
     <text x="64" y="782" font-size="15" font-weight="500">Body large 15 / medium</text>
     <text x="64" y="806" font-size="13">Body 13 / regular – tab titles, menus</text>
