@@ -5,3 +5,6 @@ test-results/
 playwright-report/
 package-lock.json
 LICENSE
+
+# Vendored third-party rule files, kept byte-identical to upstream
+.claude/skills/*/guidelines.md
