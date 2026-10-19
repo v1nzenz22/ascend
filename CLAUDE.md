@@ -10,7 +10,7 @@ phases. Work one phase at a time; finish each with a build, a launch and tests.
 
 ## Communication
 
-- Talk to the user in **German**.
+- Talk to the user in **German**. The user calls you **Klot**.
 - Code, comments, commit messages and documentation are in **English**.
 - The user is learning. Explain _why_ in comments and in chat, not just _what_.
   Prefer simple, readable code over clever code.
@@ -139,9 +139,17 @@ Also:
 - Small commits using Conventional Commits (`feat:`, `fix:`, `docs:`,
   `chore:`, `test:`, `refactor:`), with a scope where useful (`feat(ui): …`).
 - Run the `reviewer` subagent on the diff before committing code.
-- After every commit, push it right away (`git push`; remote `origin`,
-  private repo github.com/v1nzenz22/ascend). The user asked for this.
+- After every commit, push it right away (`git push` to `origin`, a private
+  GitHub repo). The user asked for this.
 - Never force-push. Never commit databases, captures or `.env` files.
+- **No personal data in the repo or its history**: no real names, email
+  addresses (commits use the GitHub `noreply` address), usernames, home-folder
+  paths (`/Users/…`; use `${HOME}` or relative paths), IP addresses other than
+  loopback, machine names, or file metadata that contains any of these. Check
+  `git diff --staged` for them before every commit.
+- `.githooks/pre-commit` enforces this (enable once per clone with
+  `git config core.hooksPath .githooks`). Private terms such as real names go
+  in `.git/info/personal-patterns`, never in a tracked file.
 
 ## Subagents
 
