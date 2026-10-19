@@ -7,7 +7,15 @@ import tseslint from "typescript-eslint";
 export default defineConfig(
   {
     // Generated or third-party code is never linted.
-    ignores: ["node_modules/", "out/", "dist/", "test-results/", "playwright-report/"],
+    ignores: [
+      "node_modules/",
+      "out/",
+      "dist/",
+      "dev-dist/",
+      "coverage/",
+      "test-results/",
+      "playwright-report/",
+    ],
   },
 
   // Recommended rule sets: common JavaScript mistakes plus TypeScript rules

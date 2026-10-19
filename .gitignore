@@ -4,21 +4,23 @@ node_modules/
 # Build output
 out/
 dist/
+dev-dist/
+coverage/
 *.tsbuildinfo
 
-# Local data – never commit browsing data or databases
+# Local data – never commit databases or exported user data
 *.sqlite
 *.sqlite3
 *.db
 *.db-journal
 *.db-wal
 *.db-shm
+ascend-backup-*.json
 
-# Test and audit artifacts
+# Test artifacts
 test-results/
 playwright-report/
-*.pcap
-*.pcapng
+blob-report/
 
 # Secrets
 .env

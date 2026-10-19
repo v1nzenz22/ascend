@@ -2,7 +2,7 @@
   "name": "ascend",
   "version": "0.0.0",
   "private": true,
-  "description": "A private, local-first desktop browser for macOS.",
+  "description": "A minimal, offline-first calorie and nutrition tracker. No account, no tracking.",
   "license": "MPL-2.0",
   "type": "module",
   "engines": {

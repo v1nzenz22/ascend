@@ -8,6 +8,8 @@
       "Bash(npx eslint:*)",
       "Bash(npx prettier:*)",
       "Bash(npx playwright test:*)",
+      "Bash(npx vitest:*)",
+      "Bash(npx vite build:*)",
       "Bash(node --version)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
@@ -19,6 +21,7 @@
       "Bash(git push origin main)"
     ],
     "ask": [
+      "Bash(npx playwright install:*)",
       "Bash(npm install:*)",
       "Bash(npm i:*)",
       "Bash(npm uninstall:*)",
