@@ -134,4 +134,8 @@ Also:
 - `privacy-auditor` – captures traffic with TShark and inspects builds with
   REA; reports every unexpected network request.
 - `ui-tester` – runs Playwright UI tests against the Electron app.
-- `reviewer` – code and security review before each commit.
+- `reviewer` – code and security review of the diff before each commit.
+- `bug-hunter` – sweeps the whole codebase for reproducible bugs (after each
+  phase or larger feature).
+- `security-auditor` – audits the whole codebase for vulnerabilities, focused
+  on untrusted web content reaching privileged code (after each phase).
