@@ -26,6 +26,10 @@ tests before the next one starts.
 - Hardened defaults: sandboxed tabs, context isolation, no preload in web
   content, permission requests denied by default, no spellcheck dictionary
   download, no default search engine
+- Local crash reports: native crashes (Crashpad minidumps) and uncaught
+  JavaScript errors are saved on this machine only, never uploaded. A menu
+  entry shows them in Finder and can export one to a file the user picks.
+  Old reports are deleted automatically (keep the last 20, at most 30 days).
 - Builds, launches and passes Playwright end-to-end tests
 
 ## Phase 3 – Blocking and HTTPS

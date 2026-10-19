@@ -95,6 +95,18 @@ Also:
 - Disable the spellchecker dictionary download (it contacts Google).
 - Never load remote code into the UI view.
 
+## Crash reports
+
+- Start `crashReporter` with `uploadToServer: false` and no `submitURL`.
+  Minidumps stay in `app.getPath('crashDumps')`.
+- Log uncaught exceptions and unhandled rejections (main and renderer) to a
+  local file under `userData/logs/`. No page content or full URLs in logs;
+  keep the origin at most.
+- Retention: keep the last 20 reports, delete anything older than 30 days.
+- Sending is **only** a user action: the user exports a report to a file they
+  choose and shares it themselves. Before export, warn that a minidump can
+  contain memory contents (e.g. visited pages). There is no built-in upload.
+
 ## Coding conventions
 
 - TypeScript `strict` mode. No `any` unless it is unavoidable and commented.
