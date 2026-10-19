@@ -5,7 +5,7 @@
     "a", cropped by a flat mint tile and pressed in with an inner shadow, plus
     grain. macOS Big Sur grid: 824 x 824 tile with a 100 px margin.
     The shipped PNG / .icns come from design/scripts/render-icon.swift, which
-    sizes the glyph exactly (ink height 900 px, centre 520 / 484 in SVG space).
+    sizes the glyph exactly (ink height 1080 px, centre 480 / 574 in SVG space).
   -->
   <defs>
     <clipPath id="tile"><rect x="100" y="100" width="824" height="824" rx="185" ry="185"/></clipPath>
@@ -28,6 +28,6 @@
   </defs>
   <g clip-path="url(#tile)" filter="url(#grain)">
     <rect x="100" y="100" width="824" height="824" fill="#A8DCD2"/>
-    <text id="glyph" x="520" y="934" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="1950" fill="#FFFFFF" filter="url(#innerShadow)">a</text>
+    <text id="glyph" x="480" y="1114" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="2340" fill="#FFFFFF" filter="url(#innerShadow)">a</text>
   </g>
 </svg>

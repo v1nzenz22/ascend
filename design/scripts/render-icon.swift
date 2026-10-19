@@ -24,8 +24,8 @@ let inkColor = srgb(0x151A1B)  // ink (mark)
 let glyphColor = srgb(0xFFFFFF)  // the icon's "a"
 let fontName = "TimesNewRomanPSMT"
 let grainStrength: Double = 16  // max +/- change per channel (0-255)
-let glyphInkHeight: CGFloat = 900  // the tile is 824 px: the "a" overflows it
-let glyphCenter = CGPoint(x: 520, y: 540)  // cropped so the "a" can only be guessed
+let glyphInkHeight: CGFloat = 1080  // the tile is 824 px: the "a" overflows it
+let glyphCenter = CGPoint(x: 480, y: 450)  // cropped so the "a" can only be guessed
 
 // MARK: - Helpers
 

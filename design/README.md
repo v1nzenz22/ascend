@@ -2,21 +2,24 @@
 
 Visual identity and UI template for ascend. Flat colour, Times for display, no gradients.
 
-| File                                                               | What it is                                                                       |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| [`tokens.json`](tokens.json)                                       | Source of truth for colors, light/dark theme, type, spacing, radii, sizes        |
-| [`logo/ascend-icon.svg`](logo/ascend-icon.svg)                     | App icon source: Times “a” with grain, Big Sur grid (824 px tile, 100 px margin) |
-| [`logo/ascend-mark.svg`](logo/ascend-mark.svg)                     | The “a” alone on transparent background (start page, about box, README)          |
-| [`template/ascend-window.svg`](template/ascend-window.svg)         | Browser window template: tabs, toolbar, side panel, start page (1440 × 900)      |
-| [`template/ascend-styleguide.svg`](template/ascend-styleguide.svg) | Six-colour palette, type scale, buttons, tabs, address bar states                |
-| `export/*.png`                                                     | PNG renders of the files above                                                   |
-| [`scripts/render-icon.swift`](scripts/render-icon.swift)           | Renders the icon and mark PNGs with exact glyph size and grain                   |
-| [`../build/icon.icns`](../build/icon.icns)                         | Finished macOS icon (16–1024 px, @1x/@2x) for packaging in Phase 7               |
+| File                                                               | What it is                                                                  |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| [`tokens.json`](tokens.json)                                       | Source of truth for colors, light/dark theme, type, spacing, radii, sizes   |
+| [`logo/ascend-icon.svg`](logo/ascend-icon.svg)                     | App icon source: cropped white Times “a”, Big Sur grid (824 px tile)        |
+| [`history/`](history/)                                             | Every earlier design version, kept to show how the identity evolved         |
+| [`logo/ascend-mark.svg`](logo/ascend-mark.svg)                     | The “a” alone on transparent background (start page, about box, README)     |
+| [`template/ascend-window.svg`](template/ascend-window.svg)         | Browser window template: tabs, toolbar, side panel, start page (1440 × 900) |
+| [`template/ascend-styleguide.svg`](template/ascend-styleguide.svg) | Six-colour palette, type scale, buttons, tabs, address bar states           |
+| `export/*.png`                                                     | PNG renders of the files above                                              |
+| [`scripts/render-icon.swift`](scripts/render-icon.swift)           | Renders the icon and mark PNGs with exact glyph size and grain              |
+| [`../build/icon.icns`](../build/icon.icns)                         | Finished macOS icon (16–1024 px, @1x/@2x) for packaging in Phase 7          |
 
 ## Concept
 
-- **Mark:** a large lowercase Times New Roman “a” in ink on a flat mint tile,
-  with film grain. The letter is the icon; it fills about 60 % of the tile.
+- **Mark:** an oversized white Times New Roman “a”, cropped by a flat mint
+  tile on the right and at the bottom, so you can only guess the letter from
+  its arch and bowl. An inner shadow presses it into the tile; film grain
+  sits on top.
 - **Colour:** six flat colours, each with one job (see `tokens.json`). Paper
   and ink carry the interface. Teal marks links, focus and secure state.
   Mint appears only in the icon and selections. No gradients anywhere.
@@ -27,6 +30,22 @@ Visual identity and UI template for ascend. Flat colour, Times for display, no g
 - **Layout:** hairlines instead of shadows and cards. The start page shows the
   mark, the address field and recently visited pages; no promotional numbers.
 - **Accessibility:** every text pair meets WCAG AA (body text ≥ 4.5:1).
+
+## Evolution
+
+Earlier versions stay in [`history/`](history/), so you can see how the
+identity got here.
+
+| Version | Icon                                                         | What changed                                                                    |
+| ------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| v0.1    | <img src="history/v0.1/ascend-icon-1024.png" width="72" alt> | Two rising chevrons on a mint-to-blue gradient. Too generic.                    |
+| v0.2    | <img src="history/v0.2/ascend-icon-1024.png" width="72" alt> | A small Times “a” with grain, still on a gradient, with stat cards in the UI.   |
+| v0.3    | <img src="history/v0.3/ascend-icon-1024.png" width="72" alt> | Flat colour, no gradients. A large ink “a”; the UI drops cards for hairlines.   |
+| v0.4    | <img src="history/v0.4/ascend-icon-1024.png" width="72" alt> | The “a” turns white, outgrows the tile and gets an inner shadow.                |
+| v0.5    | <img src="history/v0.5/ascend-icon-1024.png" width="72" alt> | Larger still and cropped at the bottom: only the arch and bowl remain. Current. |
+
+Window and style guide renders for v0.1 to v0.3 are in the same folders; v0.4
+and v0.5 changed only the icon.
 
 ### Font license note
 
