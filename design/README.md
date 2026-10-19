@@ -1,6 +1,6 @@
 # ascend design
 
-Visual identity and UI template for ascend: mint → blue, calm, private.
+Visual identity and UI template for ascend. Flat colour, Times for display, no gradients.
 
 | File                                                               | What it is                                                                       |
 | ------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
@@ -8,24 +8,25 @@ Visual identity and UI template for ascend: mint → blue, calm, private.
 | [`logo/ascend-icon.svg`](logo/ascend-icon.svg)                     | App icon source: Times “a” with grain, Big Sur grid (824 px tile, 100 px margin) |
 | [`logo/ascend-mark.svg`](logo/ascend-mark.svg)                     | The “a” alone on transparent background (start page, about box, README)          |
 | [`template/ascend-window.svg`](template/ascend-window.svg)         | Browser window template: tabs, toolbar, side panel, start page (1440 × 900)      |
-| [`template/ascend-styleguide.svg`](template/ascend-styleguide.svg) | Color ramps, gradient, type scale, buttons, tabs, address bar states             |
+| [`template/ascend-styleguide.svg`](template/ascend-styleguide.svg) | Six-colour palette, type scale, buttons, tabs, address bar states                |
 | `export/*.png`                                                     | PNG renders of the files above                                                   |
-| [`scripts/render-icon.swift`](scripts/render-icon.swift)           | Renders the icon and mark PNGs with grain                                        |
+| [`scripts/render-icon.swift`](scripts/render-icon.swift)           | Renders the icon and mark PNGs with exact glyph size and grain                   |
 | [`../build/icon.icns`](../build/icon.icns)                         | Finished macOS icon (16–1024 px, @1x/@2x) for packaging in Phase 7               |
 
 ## Concept
 
-- **Mark:** a small lowercase Times New Roman “a” in paper white on a
-  mint → teal → blue tile, with a light film grain. Quiet and editorial.
-- **Color:** mint for “safe / private” (secure lock, accent), blue for strong
-  actions and focus. Neutrals are slightly blue-green so the chrome feels calm.
-- **Type:** SF Pro for the interface, Times New Roman for display text (the
-  wordmark, start page title). Both ship with macOS, so nothing is downloaded
-  (privacy rule 2).
-- **Texture:** grain only on brand surfaces (icon, start page tile, gradient),
-  never on text the user has to read.
-- **Layout:** Vivaldi-style side panel rail on the left, tabs on top, a
-  shield in the toolbar for the blocker (Phase 3).
+- **Mark:** a large lowercase Times New Roman “a” in ink on a flat mint tile,
+  with film grain. The letter is the icon; it fills about 60 % of the tile.
+- **Colour:** six flat colours, each with one job (see `tokens.json`). Paper
+  and ink carry the interface. Teal marks links, focus and secure state.
+  Mint appears only in the icon and selections. No gradients anywhere.
+- **Type:** Times New Roman for display (the mark, wordmark, start page), SF
+  Pro for the interface. Both ship with macOS, so nothing is downloaded
+  (privacy rule 2). Times and dates use tabular figures.
+- **Texture:** grain only on the icon and mark, never on UI text.
+- **Layout:** hairlines instead of shadows and cards. The start page shows the
+  mark, the address field and recently visited pages; no promotional numbers.
+- **Accessibility:** every text pair meets WCAG AA (body text ≥ 4.5:1).
 
 ### Font license note
 
@@ -60,7 +61,7 @@ sips -s format png template/ascend-window.svg --out export/ascend-window.png
 sips -s format png template/ascend-styleguide.svg --out export/ascend-styleguide.png
 ```
 
-`sips` ignores SVG filters, so the template PNGs show the gradient without
-grain; the SVGs (and the icon PNG) have it. To rebuild `build/icon.icns`, scale the
+`sips` ignores SVG filters, so only the Swift-rendered icon and mark PNGs
+show the grain. To rebuild `build/icon.icns`, scale the
 1024 PNG to 16, 32, 128, 256 and 512 px (plus @2x) into an `ascend.iconset`
 folder with `sips -z` and run `iconutil -c icns ascend.iconset`.

@@ -1,174 +1,134 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="900" viewBox="0 0 1440 900" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif">
   <title>ascend – browser window template (light)</title>
   <!--
-    Layout template for the ascend browser window. Every region is a named
-    group (id) so it shows up as a separate layer after import.
-    Sizes follow design/tokens.json: tab 34, toolbar 44, side rail 48.
+    Layout template for the ascend browser window, v0.3.
+    Flat colours only (design/tokens.json): paper, ink, graphite, rule, mint,
+    teal. No gradients. Each region is a named group so it imports as a layer.
   -->
   <defs>
-    <linearGradient id="brand" x1="0.1" y1="0" x2="0.9" y2="1">
-      <stop offset="0" stop-color="#9BE8CF"/>
-      <stop offset="0.55" stop-color="#5CC4CF"/>
-      <stop offset="1" stop-color="#3A82D6"/>
-    </linearGradient>
-    <filter id="grain" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
-      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
-      <feComponentTransfer in="mono" result="soft"><feFuncA type="linear" slope="0" intercept="0.14"/></feComponentTransfer>
-      <feComposite in="soft" in2="SourceGraphic" operator="in" result="g"/>
-      <feBlend in="SourceGraphic" in2="g" mode="overlay"/>
-    </filter>
-    <linearGradient id="canvas" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#DDF3EE"/>
-      <stop offset="1" stop-color="#D6E6F7"/>
-    </linearGradient>
+    <clipPath id="windowClip"><rect x="40" y="40" width="1360" height="820" rx="10"/></clipPath>
     <filter id="windowShadow" x="-5%" y="-5%" width="110%" height="115%">
-      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0C1418" flood-opacity="0.22"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#000000" flood-opacity="0.16"/>
     </filter>
-    <clipPath id="windowClip"><rect x="40" y="40" width="1360" height="820" rx="12"/></clipPath>
   </defs>
 
-  <rect id="artboard-background" width="1440" height="900" fill="url(#canvas)"/>
+  <rect id="artboard-background" width="1440" height="900" fill="#E7E5DD"/>
 
   <g id="window" filter="url(#windowShadow)">
-    <rect x="40" y="40" width="1360" height="820" rx="12" fill="#FFFFFF"/>
+    <rect x="40" y="40" width="1360" height="820" rx="10" fill="#FBFAF7"/>
   </g>
 
   <g clip-path="url(#windowClip)">
     <!-- Tab strip -->
     <g id="tab-strip">
-      <rect x="40" y="40" width="1360" height="46" fill="#E9EFF1"/>
+      <rect x="40" y="40" width="1360" height="44" fill="#EFEDE6"/>
+      <line x1="40" y1="83.5" x2="1400" y2="83.5" stroke="#DEDCD3"/>
       <g id="traffic-lights">
-        <circle cx="64" cy="63" r="6" fill="#FF5F57"/>
-        <circle cx="84" cy="63" r="6" fill="#FEBC2E"/>
-        <circle cx="104" cy="63" r="6" fill="#28C840"/>
+        <circle cx="62" cy="62" r="6" fill="#FF5F57"/>
+        <circle cx="82" cy="62" r="6" fill="#FEBC2E"/>
+        <circle cx="102" cy="62" r="6" fill="#28C840"/>
       </g>
       <g id="tab-active">
-        <path d="M180 86 V60 a8 8 0 0 1 8 -8 H392 a8 8 0 0 1 8 8 V86 Z" fill="#FFFFFF"/>
-        <text x="202" y="76" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="20" fill="#2A8FB0">a</text>
-        <text x="218" y="74" font-size="13" font-weight="500" fill="#141E24">New Tab</text>
-        <path d="M380 65 l8 8 M388 65 l-8 8" stroke="#56676F" stroke-width="1.6" stroke-linecap="round"/>
+        <rect x="160" y="40" width="230" height="44" fill="#FBFAF7"/>
+        <line x1="160.5" y1="40" x2="160.5" y2="84" stroke="#DEDCD3"/>
+        <line x1="389.5" y1="40" x2="389.5" y2="84" stroke="#DEDCD3"/>
+        <rect x="176" y="54" width="16" height="16" rx="3.5" fill="#A8DCD2"/>
+        <text x="184" y="67" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="15" fill="#151A1B">a</text>
+        <text x="202" y="67" font-size="13" font-weight="500" fill="#151A1B">New Tab</text>
+        <path d="M368 58 l8 8 M376 58 l-8 8" stroke="#5A6264" stroke-width="1.5" stroke-linecap="round"/>
       </g>
       <g id="tab-inactive">
-        <circle cx="420" cy="69" r="7" fill="#9DCBF5"/>
-        <text x="434" y="74" font-size="13" fill="#56676F">example.com</text>
-        <path d="M600 65 l8 8 M608 65 l-8 8" stroke="#93A4AD" stroke-width="1.6" stroke-linecap="round"/>
-        <line x1="620" y1="58" x2="620" y2="80" stroke="#D5DFE3"/>
+        <rect x="406" y="55" width="14" height="14" rx="3" fill="none" stroke="#5A6264" stroke-width="1.2"/>
+        <text x="430" y="67" font-size="13" fill="#5A6264">Example Domain</text>
+        <line x1="619.5" y1="52" x2="619.5" y2="72" stroke="#DEDCD3"/>
       </g>
       <g id="tab-new">
-        <path d="M640 69 h14 M647 62 v14" stroke="#56676F" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M638 62 h12 M644 56 v12" stroke="#5A6264" stroke-width="1.5" stroke-linecap="round"/>
       </g>
     </g>
 
     <!-- Toolbar -->
     <g id="toolbar">
-      <rect x="40" y="86" width="1360" height="44" fill="#FFFFFF"/>
-      <line x1="40" y1="130" x2="1400" y2="130" stroke="#E9EFF1"/>
-      <g id="nav-buttons" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-        <path d="M120 101 l-7 7 l7 7 M113 108 h14" stroke="#25333A"/>
-        <path d="M150 101 l7 7 l-7 7 M157 108 h-14" stroke="#93A4AD"/>
-        <path d="M196 102 a7 7 0 1 0 2 6 M196 97 v6 h-6" stroke="#25333A"/>
+      <rect x="40" y="84" width="1360" height="44" fill="#FBFAF7"/>
+      <line x1="40" y1="127.5" x2="1400" y2="127.5" stroke="#DEDCD3"/>
+      <g id="nav-buttons" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6">
+        <path d="M74 99 l-7 7 l7 7 M67 106 h14" stroke="#151A1B"/>
+        <path d="M104 99 l7 7 l-7 7 M111 106 h-14" stroke="#B9B7AE"/>
+        <path d="M148 100 a7 7 0 1 0 2 6 M148 95 v6 h-6" stroke="#151A1B"/>
       </g>
       <g id="address-bar">
-        <rect x="230" y="93" width="980" height="30" rx="15" fill="#F5F8F9" stroke="#48D3AE" stroke-width="1.5"/>
-        <g id="lock" transform="translate(246 100)">
-          <rect x="0" y="7" width="12" height="9" rx="2" fill="#16977C"/>
-          <path d="M2.5 7 V4.5 a3.5 3.5 0 0 1 7 0 V7" fill="none" stroke="#16977C" stroke-width="1.8"/>
+        <rect x="176.5" y="92.5" width="1080" height="27" rx="6" fill="#FFFFFF" stroke="#DEDCD3"/>
+        <g id="lock" transform="translate(189 98)">
+          <rect x="0" y="6" width="10" height="8" rx="1.5" fill="#1E5C5E"/>
+          <path d="M2 6 V4 a3 3 0 0 1 6 0 V6" fill="none" stroke="#1E5C5E" stroke-width="1.5"/>
         </g>
-        <text x="268" y="113" font-size="13" fill="#93A4AD">https://<tspan fill="#141E24">example.com</tspan>/</text>
+        <text x="208" y="110.5" font-size="13" fill="#151A1B">example.com<tspan fill="#5A6264">/</tspan></text>
       </g>
-      <g id="shield">
-        <path d="M1250 97 l10 4 v6 c0 6 -4 10 -10 13 c-6 -3 -10 -7 -10 -13 v-6 Z" fill="url(#brand)"/>
-        <path d="M1255 106 l-5 -5 l-5 5" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        <rect x="1262" y="94" width="22" height="14" rx="7" fill="#16977C"/>
-        <text x="1273" y="105" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">12</text>
+      <g id="blocker">
+        <path d="M1286 97 l8 3 v5 c0 5 -3.5 8 -8 10 c-4.5 -2 -8 -5 -8 -10 v-5 Z" fill="none" stroke="#5A6264" stroke-width="1.5" stroke-linejoin="round"/>
+        <text x="1300" y="110.5" font-size="12" fill="#5A6264" style="font-variant-numeric: tabular-nums">12</text>
       </g>
-      <g id="menu" fill="#56676F">
-        <circle cx="1370" cy="102" r="1.8"/>
-        <circle cx="1370" cy="108" r="1.8"/>
-        <circle cx="1370" cy="114" r="1.8"/>
+      <g id="menu" fill="#5A6264">
+        <circle cx="1372" cy="100" r="1.6"/><circle cx="1372" cy="106" r="1.6"/><circle cx="1372" cy="112" r="1.6"/>
       </g>
     </g>
 
-    <!-- Side panel rail (Vivaldi-style) -->
+    <!-- Side panel rail -->
     <g id="side-rail">
-      <rect x="40" y="131" width="48" height="729" fill="#F5F8F9"/>
-      <line x1="88" y1="131" x2="88" y2="860" stroke="#E9EFF1"/>
-      <g fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="50" y="146" width="28" height="28" rx="8" fill="#C9F5E6"/>
-        <g id="icon-history" stroke="#127862"><circle cx="64" cy="160" r="7"/><path d="M64 156 v4 l3 2"/></g>
-        <g id="icon-bookmarks" stroke="#56676F"><path d="M59 196 h10 v14 l-5 -4 l-5 4 Z"/></g>
-        <g id="icon-notes" stroke="#56676F"><rect x="58" y="234" width="12" height="15" rx="2"/><path d="M61 239 h6 M61 243 h6"/></g>
-        <g id="icon-downloads" stroke="#56676F"><path d="M64 274 v10 M59 280 l5 5 l5 -5 M58 289 h12"/></g>
-        <g id="icon-settings" stroke="#56676F"><circle cx="64" cy="836" r="3"/><circle cx="64" cy="836" r="7.5" stroke-dasharray="3 2.2"/></g>
+      <rect x="40" y="128" width="48" height="732" fill="#EFEDE6"/>
+      <line x1="87.5" y1="128" x2="87.5" y2="860" stroke="#DEDCD3"/>
+      <rect x="40" y="146" width="2" height="28" fill="#1E5C5E"/>
+      <g fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <g id="icon-history" stroke="#151A1B"><circle cx="64" cy="160" r="7"/><path d="M64 156 v4 l3 2"/></g>
+        <g id="icon-bookmarks" stroke="#5A6264"><path d="M59 197 h10 v14 l-5 -4 l-5 4 Z"/></g>
+        <g id="icon-notes" stroke="#5A6264"><rect x="58" y="234" width="12" height="15" rx="1.5"/><path d="M61 239 h6 M61 243 h6"/></g>
+        <g id="icon-downloads" stroke="#5A6264"><path d="M64 274 v10 M59 280 l5 5 l5 -5 M58 289 h12"/></g>
+        <g id="icon-settings" stroke="#5A6264"><circle cx="64" cy="834" r="3"/><circle cx="64" cy="834" r="7.5"/></g>
       </g>
     </g>
 
-    <!-- Side panel (open: history) -->
-    <g id="side-panel">
-      <rect x="89" y="131" width="260" height="729" fill="#FFFFFF"/>
-      <line x1="349" y1="131" x2="349" y2="860" stroke="#E9EFF1"/>
-      <text x="109" y="164" font-size="15" font-weight="600" fill="#141E24">History</text>
-      <rect x="109" y="178" width="220" height="28" rx="8" fill="#F5F8F9"/>
-      <text x="121" y="196" font-size="12" fill="#93A4AD">Search history (local)</text>
-      <text x="109" y="232" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">TODAY</text>
+    <!-- Side panel: history -->
+    <g id="side-panel" style="font-variant-numeric: tabular-nums">
+      <rect x="88" y="128" width="264" height="732" fill="#FBFAF7"/>
+      <line x1="351.5" y1="128" x2="351.5" y2="860" stroke="#DEDCD3"/>
+      <text x="108" y="160" font-size="15" font-weight="600" fill="#151A1B">History</text>
+      <rect x="108.5" y="174.5" width="223" height="27" rx="6" fill="#FFFFFF" stroke="#DEDCD3"/>
+      <text x="119" y="192" font-size="12" fill="#5A6264">Search history…</text>
+
+      <text x="108" y="232" font-size="12" font-weight="600" fill="#5A6264">Today</text>
       <g font-size="13">
-        <circle cx="117" cy="256" r="6" fill="#9DCBF5"/><text x="131" y="260" fill="#141E24">example.com</text><text x="329" y="260" fill="#93A4AD" font-size="11" text-anchor="end">14:32</text>
-        <circle cx="117" cy="286" r="6" fill="#A3EED6"/><text x="131" y="290" fill="#141E24">developer.mozilla.org</text><text x="329" y="290" fill="#93A4AD" font-size="11" text-anchor="end">13:05</text>
-        <circle cx="117" cy="316" r="6" fill="#CDE5FA"/><text x="131" y="320" fill="#141E24">electronjs.org</text><text x="329" y="320" fill="#93A4AD" font-size="11" text-anchor="end">11:48</text>
+        <text x="108" y="258" fill="#151A1B">Example Domain</text><text x="332" y="258" fill="#5A6264" font-size="12" text-anchor="end">14:32</text>
+        <text x="108" y="284" fill="#151A1B">MDN Web Docs</text><text x="332" y="284" fill="#5A6264" font-size="12" text-anchor="end">13:05</text>
+        <text x="108" y="310" fill="#151A1B">Electron Documentation</text><text x="332" y="310" fill="#5A6264" font-size="12" text-anchor="end">11:48</text>
       </g>
-      <text x="109" y="358" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">YESTERDAY</text>
+      <text x="108" y="348" font-size="12" font-weight="600" fill="#5A6264">Yesterday</text>
       <g font-size="13">
-        <circle cx="117" cy="382" r="6" fill="#C9F5E6"/><text x="131" y="386" fill="#141E24">wikipedia.org</text><text x="329" y="386" fill="#93A4AD" font-size="11" text-anchor="end">21:10</text>
-        <circle cx="117" cy="412" r="6" fill="#9DCBF5"/><text x="131" y="416" fill="#141E24">github.com</text><text x="329" y="416" fill="#93A4AD" font-size="11" text-anchor="end">18:22</text>
+        <text x="108" y="374" fill="#151A1B">Wikipedia</text><text x="332" y="374" fill="#5A6264" font-size="12" text-anchor="end">21:10</text>
+        <text x="108" y="400" fill="#151A1B">GitHub</text><text x="332" y="400" fill="#5A6264" font-size="12" text-anchor="end">18:22</text>
       </g>
+      <text x="108" y="836" font-size="12" fill="#5A6264">Stored on this Mac only.</text>
     </g>
 
     <!-- Content: start page -->
-    <g id="content-start-page">
-      <rect x="350" y="131" width="1050" height="729" fill="#FBFDFD"/>
-      <g id="start-mark">
-        <g filter="url(#grain)"><rect x="839" y="232" width="72" height="72" rx="17" fill="url(#brand)"/></g>
-        <text x="875" y="286" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="52" fill="#FBFAF6">a</text>
-      </g>
-      <text x="875" y="362" font-family="'Times New Roman', Times, serif" font-size="38" fill="#141E24" text-anchor="middle">ascend</text>
-      <text x="875" y="390" font-size="13" fill="#56676F" text-anchor="middle">Private by default. Nothing leaves this Mac unless you ask.</text>
+    <g id="content-start-page" style="font-variant-numeric: tabular-nums">
+      <rect x="352" y="128" width="1048" height="732" fill="#FBFAF7"/>
+      <text id="start-mark" x="876" y="356" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="200" fill="#151A1B">a</text>
 
       <g id="start-address">
-        <rect x="625" y="420" width="500" height="44" rx="22" fill="#FFFFFF" stroke="#D5DFE3"/>
-        <text x="649" y="447" font-size="15" fill="#93A4AD">Enter an address</text>
-        <rect x="1077" y="428" width="40" height="28" rx="14" fill="url(#brand)"/>
-        <path d="M1091 442 h12 M1098 437 l5 5 l-5 5" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="616.5" y="398.5" width="520" height="39" rx="7" fill="#FFFFFF" stroke="#DEDCD3"/>
+        <text x="634" y="423" font-size="15" fill="#5A6264">Enter an address…</text>
       </g>
 
-      <g id="privacy-cards" font-size="12">
-        <rect x="545" y="510" width="200" height="96" rx="12" fill="#FFFFFF" stroke="#E9EFF1"/>
-        <text x="565" y="548" font-size="28" font-weight="600" fill="#16977C">0</text>
-        <text x="565" y="574" fill="#56676F">telemetry requests sent</text>
-        <text x="565" y="590" fill="#93A4AD">since install</text>
-
-        <rect x="775" y="510" width="200" height="96" rx="12" fill="#FFFFFF" stroke="#E9EFF1"/>
-        <text x="795" y="548" font-size="28" font-weight="600" fill="#2275D6">1,284</text>
-        <text x="795" y="574" fill="#56676F">trackers blocked</text>
-        <text x="795" y="590" fill="#93A4AD">this week</text>
-
-        <rect x="1005" y="510" width="200" height="96" rx="12" fill="#FFFFFF" stroke="#E9EFF1"/>
-        <g transform="translate(1025 524)">
-          <rect x="0" y="9" width="16" height="12" rx="2.5" fill="#22BC98"/>
-          <path d="M3.5 9 V6 a4.5 4.5 0 0 1 9 0 V9" fill="none" stroke="#22BC98" stroke-width="2.2"/>
-        </g>
-        <text x="1025" y="574" fill="#56676F">history stored locally</text>
-        <text x="1025" y="590" fill="#93A4AD">no cloud sync</text>
-      </g>
-
-      <g id="recent-tiles" font-size="12" fill="#56676F" text-anchor="middle">
-        <text x="875" y="660" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">RECENTLY VISITED</text>
-        <rect x="595" y="680" width="96" height="72" rx="12" fill="#EAF4FD"/><text x="643" y="774">example.com</text>
-        <rect x="715" y="680" width="96" height="72" rx="12" fill="#EAFBF5"/><text x="763" y="774">mdn</text>
-        <rect x="835" y="680" width="96" height="72" rx="12" fill="#EAF4FD"/><text x="883" y="774">electronjs</text>
-        <rect x="955" y="680" width="96" height="72" rx="12" fill="#EAFBF5"/><text x="1003" y="774">wikipedia</text>
-        <rect x="1075" y="680" width="96" height="72" rx="12" fill="#F5F8F9" stroke="#D5DFE3" stroke-dasharray="4 4"/>
-        <path d="M1115 716 h16 M1123 708 v16" stroke="#93A4AD" stroke-width="1.8" stroke-linecap="round"/>
+      <g id="recently-visited" font-size="13">
+        <text x="616" y="498" font-size="12" font-weight="600" fill="#5A6264">Recently visited</text>
+        <line x1="616" y1="510.5" x2="1136" y2="510.5" stroke="#DEDCD3"/>
+        <text x="616" y="536" fill="#151A1B">Example Domain</text><text x="876" y="536" fill="#5A6264">example.com</text><text x="1136" y="536" fill="#5A6264" font-size="12" text-anchor="end">14:32</text>
+        <line x1="616" y1="550.5" x2="1136" y2="550.5" stroke="#EAE8E1"/>
+        <text x="616" y="576" fill="#151A1B">MDN Web Docs</text><text x="876" y="576" fill="#5A6264">developer.mozilla.org</text><text x="1136" y="576" fill="#5A6264" font-size="12" text-anchor="end">13:05</text>
+        <line x1="616" y1="590.5" x2="1136" y2="590.5" stroke="#EAE8E1"/>
+        <text x="616" y="616" fill="#151A1B">Electron Documentation</text><text x="876" y="616" fill="#5A6264">electronjs.org</text><text x="1136" y="616" fill="#5A6264" font-size="12" text-anchor="end">11:48</text>
+        <line x1="616" y1="630.5" x2="1136" y2="630.5" stroke="#EAE8E1"/>
+        <text x="616" y="656" fill="#151A1B">Wikipedia</text><text x="876" y="656" fill="#5A6264">wikipedia.org</text><text x="1136" y="656" fill="#5A6264" font-size="12" text-anchor="end">Yesterday</text>
       </g>
     </g>
   </g>

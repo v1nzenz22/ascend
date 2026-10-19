@@ -1,122 +1,94 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1000" viewBox="0 0 1440 1000" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif">
-  <title>ascend – style guide</title>
-  <!-- Colors, gradient, type scale and core components. Values match design/tokens.json. -->
-  <defs>
-    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#9BE8CF"/>
-      <stop offset="0.55" stop-color="#5CC4CF"/>
-      <stop offset="1" stop-color="#3A82D6"/>
-    </linearGradient>
-    <linearGradient id="brandDiag" x1="0.1" y1="0" x2="0.9" y2="1">
-      <stop offset="0" stop-color="#9BE8CF"/>
-      <stop offset="0.55" stop-color="#5CC4CF"/>
-      <stop offset="1" stop-color="#3A82D6"/>
-    </linearGradient>
-    <filter id="grain" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
-      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
-      <feComponentTransfer in="mono" result="soft"><feFuncA type="linear" slope="0" intercept="0.14"/></feComponentTransfer>
-      <feComposite in="soft" in2="SourceGraphic" operator="in" result="g"/>
-      <feBlend in="SourceGraphic" in2="g" mode="overlay"/>
-    </filter>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif">
+  <title>ascend – style guide v0.3</title>
+  <!-- Flat palette, type and core components. Values match design/tokens.json. No gradients. -->
 
-  <rect width="1440" height="1000" fill="#FFFFFF"/>
+  <rect width="1440" height="900" fill="#FBFAF7"/>
 
   <g id="header">
-    <g filter="url(#grain)"><rect x="64" y="56" width="56" height="56" rx="13" fill="url(#brandDiag)"/></g>
-    <text x="92" y="98" text-anchor="middle" font-family="'Times New Roman', Times, serif" font-size="40" fill="#FBFAF6">a</text>
-    <text x="140" y="86" font-family="'Times New Roman', Times, serif" font-size="34" fill="#141E24">ascend</text>
-    <text x="140" y="108" font-size="13" fill="#56676F">Style guide · v0.2 · Times “a”, mint → blue, grain</text>
+    <text x="64" y="150" font-family="'Times New Roman', Times, serif" font-size="140" fill="#151A1B">a</text>
+    <text x="160" y="104" font-family="'Times New Roman', Times, serif" font-size="40" fill="#151A1B">ascend</text>
+    <text x="160" y="132" font-size="13" fill="#5A6264">Style guide v0.3 · flat colour · Times for display, SF Pro for interface</text>
+  </g>
+  <line x1="64" y1="190.5" x2="1376" y2="190.5" stroke="#DEDCD3"/>
+
+  <!-- Palette: six colours, each with a job -->
+  <g id="palette" font-size="12" style="font-variant-numeric: tabular-nums">
+    <text x="64" y="230" font-size="12" font-weight="600" fill="#5A6264">Colour</text>
+    <g transform="translate(64 248)">
+      <rect width="196" height="120" fill="#F6F5F0" stroke="#DEDCD3"/>
+      <text x="0" y="146" font-size="13" font-weight="600" fill="#151A1B">Paper</text>
+      <text x="0" y="164" fill="#5A6264">#F6F5F0 · backgrounds</text>
+    </g>
+    <g transform="translate(284 248)">
+      <rect width="196" height="120" fill="#151A1B"/>
+      <text x="0" y="146" font-size="13" font-weight="600" fill="#151A1B">Ink</text>
+      <text x="0" y="164" fill="#5A6264">#151A1B · text, primary · 16.1:1</text>
+    </g>
+    <g transform="translate(504 248)">
+      <rect width="196" height="120" fill="#5A6264"/>
+      <text x="0" y="146" font-size="13" font-weight="600" fill="#151A1B">Graphite</text>
+      <text x="0" y="164" fill="#5A6264">#5A6264 · secondary text · 5.7:1</text>
+    </g>
+    <g transform="translate(724 248)">
+      <rect width="196" height="120" fill="#DEDCD3"/>
+      <text x="0" y="146" font-size="13" font-weight="600" fill="#151A1B">Rule</text>
+      <text x="0" y="164" fill="#5A6264">#DEDCD3 · hairlines, borders</text>
+    </g>
+    <g transform="translate(944 248)">
+      <rect width="196" height="120" fill="#A8DCD2"/>
+      <text x="0" y="146" font-size="13" font-weight="600" fill="#151A1B">Mint</text>
+      <text x="0" y="164" fill="#5A6264">#A8DCD2 · icon, selection</text>
+    </g>
+    <g transform="translate(1164 248)">
+      <rect width="196" height="120" fill="#1E5C5E"/>
+      <text x="0" y="146" font-size="13" font-weight="600" fill="#151A1B">Teal</text>
+      <text x="0" y="164" fill="#5A6264">#1E5C5E · links, focus, secure · 7:1</text>
+    </g>
   </g>
 
-  <!-- Color ramps -->
-  <g id="colors" font-size="11">
-    <text x="64" y="168" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">MINT</text>
-    <g transform="translate(64 180)">
-      <rect x="0" width="140" height="64" rx="8" fill="#EAFBF5"/><text x="10" y="82" fill="#25333A">50 #EAFBF5</text>
-      <rect x="152" width="140" height="64" rx="8" fill="#C9F5E6"/><text x="162" y="82" fill="#25333A">100 #C9F5E6</text>
-      <rect x="304" width="140" height="64" rx="8" fill="#A3EED6"/><text x="314" y="82" fill="#25333A">200 #A3EED6</text>
-      <rect x="456" width="140" height="64" rx="8" fill="#74E3C2"/><text x="466" y="82" fill="#25333A">300 #74E3C2</text>
-      <rect x="608" width="140" height="64" rx="8" fill="#48D3AE"/><text x="618" y="82" fill="#25333A">400 #48D3AE</text>
-      <rect x="760" width="140" height="64" rx="8" fill="#22BC98"/><text x="770" y="82" fill="#25333A">500 #22BC98 · accent</text>
-      <rect x="912" width="140" height="64" rx="8" fill="#16977C"/><text x="922" y="82" fill="#25333A">600 #16977C · secure</text>
-      <rect x="1064" width="140" height="64" rx="8" fill="#127862"/><text x="1074" y="82" fill="#25333A">700 #127862</text>
-    </g>
+  <line x1="64" y1="460.5" x2="1376" y2="460.5" stroke="#DEDCD3"/>
 
-    <text x="64" y="300" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">BLUE</text>
-    <g transform="translate(64 312)">
-      <rect x="0" width="140" height="64" rx="8" fill="#EAF4FD"/><text x="10" y="82" fill="#25333A">50 #EAF4FD</text>
-      <rect x="152" width="140" height="64" rx="8" fill="#CDE5FA"/><text x="162" y="82" fill="#25333A">100 #CDE5FA</text>
-      <rect x="304" width="140" height="64" rx="8" fill="#9DCBF5"/><text x="314" y="82" fill="#25333A">200 #9DCBF5</text>
-      <rect x="456" width="140" height="64" rx="8" fill="#66ABEE"/><text x="466" y="82" fill="#25333A">300 #66ABEE</text>
-      <rect x="608" width="140" height="64" rx="8" fill="#3A8EE6"/><text x="618" y="82" fill="#25333A">400 #3A8EE6</text>
-      <rect x="760" width="140" height="64" rx="8" fill="#2275D6"/><text x="770" y="82" fill="#25333A">500 #2275D6 · strong</text>
-      <rect x="912" width="140" height="64" rx="8" fill="#1A5DB2"/><text x="922" y="82" fill="#25333A">600 #1A5DB2</text>
-      <rect x="1064" width="140" height="64" rx="8" fill="#16498A"/><text x="1074" y="82" fill="#25333A">700 #16498A</text>
-    </g>
-
-    <text x="64" y="432" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">NEUTRAL</text>
-    <g transform="translate(64 444)">
-      <rect x="0" width="140" height="64" rx="8" fill="#F5F8F9" stroke="#E9EFF1"/><text x="10" y="82" fill="#25333A">50 #F5F8F9</text>
-      <rect x="152" width="140" height="64" rx="8" fill="#E9EFF1"/><text x="162" y="82" fill="#25333A">100 #E9EFF1</text>
-      <rect x="304" width="140" height="64" rx="8" fill="#D5DFE3"/><text x="314" y="82" fill="#25333A">200 #D5DFE3</text>
-      <rect x="456" width="140" height="64" rx="8" fill="#93A4AD"/><text x="466" y="82" fill="#25333A">400 #93A4AD</text>
-      <rect x="608" width="140" height="64" rx="8" fill="#56676F"/><text x="618" y="82" fill="#25333A">600 #56676F</text>
-      <rect x="760" width="140" height="64" rx="8" fill="#25333A"/><text x="770" y="82" fill="#25333A">800 #25333A</text>
-      <rect x="912" width="140" height="64" rx="8" fill="#141E24"/><text x="922" y="82" fill="#25333A">900 #141E24 · text</text>
-      <rect x="1064" width="140" height="64" rx="8" fill="#0C1418"/><text x="1074" y="82" fill="#25333A">950 #0C1418 · dark bg</text>
-    </g>
-
-    <text x="64" y="564" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">BRAND GRADIENT · WITH GRAIN</text>
-    <g filter="url(#grain)"><rect x="64" y="576" width="1204" height="48" rx="12" fill="url(#brand)"/></g>
-    <text x="80" y="606" font-size="12" font-weight="500" fill="#127862">#9BE8CF</text>
-    <text x="666" y="606" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="middle">#5CC4CF</text>
-    <text x="1252" y="606" font-size="12" font-weight="500" fill="#FFFFFF" text-anchor="end">#3A82D6</text>
-  </g>
-
-  <!-- Typography -->
-  <g id="typography" fill="#141E24">
-    <text x="64" y="680" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">TYPE · SF PRO UI, TIMES NEW ROMAN DISPLAY (SYSTEM FONTS)</text>
-    <text x="64" y="722" font-family="'Times New Roman', Times, serif" font-size="34">Display 34 / Times New Roman</text>
-    <text x="64" y="754" font-size="20" font-weight="600">Heading 20 / semibold</text>
-    <text x="64" y="782" font-size="15" font-weight="500">Body large 15 / medium</text>
-    <text x="64" y="806" font-size="13">Body 13 / regular – tab titles, menus</text>
-    <text x="64" y="828" font-size="12" fill="#56676F">Caption 12 / regular – secondary text</text>
-    <text x="64" y="850" font-size="12" font-family="'SF Mono', ui-monospace, Menlo, monospace" fill="#56676F">Mono 12 – https://example.com/path</text>
+  <!-- Type -->
+  <g id="typography" fill="#151A1B">
+    <text x="64" y="500" font-size="12" font-weight="600" fill="#5A6264">Type</text>
+    <text x="64" y="560" font-family="'Times New Roman', Times, serif" font-size="48">Display 48, Times New Roman</text>
+    <text x="64" y="606" font-family="'Times New Roman', Times, serif" font-size="28">Title 28, Times New Roman</text>
+    <text x="64" y="644" font-size="15" font-weight="600">Heading 15, SF Pro semibold</text>
+    <text x="64" y="672" font-size="13">Body 13, SF Pro: tab titles, menus, lists</text>
+    <text x="64" y="696" font-size="12" fill="#5A6264">Caption 12, graphite: times, hints, status</text>
+    <text x="64" y="720" font-size="12" font-family="'SF Mono', ui-monospace, Menlo, monospace" fill="#5A6264">Mono 12: example.com/path?q=1</text>
   </g>
 
   <!-- Components -->
   <g id="components" font-size="13">
-    <text x="640" y="680" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">BUTTONS</text>
-    <rect x="640" y="696" width="120" height="34" rx="8" fill="url(#brandDiag)"/>
-    <text x="700" y="718" fill="#FFFFFF" font-weight="600" text-anchor="middle">Primary</text>
-    <rect x="776" y="696" width="120" height="34" rx="8" fill="#FFFFFF" stroke="#D5DFE3"/>
-    <text x="836" y="718" fill="#141E24" font-weight="500" text-anchor="middle">Secondary</text>
-    <rect x="912" y="696" width="120" height="34" rx="8" fill="#EAFBF5"/>
-    <text x="972" y="718" fill="#127862" font-weight="500" text-anchor="middle">Ghost</text>
-    <rect x="1048" y="696" width="120" height="34" rx="8" fill="#FDECEC"/>
-    <text x="1108" y="718" fill="#C2373C" font-weight="500" text-anchor="middle">Danger</text>
+    <text x="760" y="500" font-size="12" font-weight="600" fill="#5A6264">Components</text>
 
-    <text x="640" y="766" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">TABS</text>
-    <rect x="640" y="778" width="528" height="40" rx="8" fill="#E9EFF1"/>
-    <path d="M648 818 V792 a6 6 0 0 1 6 -6 H830 a6 6 0 0 1 6 6 V818 Z" fill="#FFFFFF"/>
-    <text x="664" y="808" fill="#141E24" font-weight="500">Active tab</text>
-    <text x="852" y="808" fill="#56676F">Inactive tab</text>
-    <text x="1020" y="808" fill="#93A4AD">Loading…</text>
-    <circle cx="1006" cy="804" r="6" fill="none" stroke="#48D3AE" stroke-width="2" stroke-dasharray="20 18"/>
+    <rect x="760" y="520" width="112" height="32" rx="6" fill="#151A1B"/>
+    <text x="816" y="541" fill="#F6F5F0" font-weight="500" text-anchor="middle">Open Page</text>
+    <rect x="884.5" y="520.5" width="112" height="31" rx="6" fill="#FFFFFF" stroke="#DEDCD3"/>
+    <text x="940" y="541" fill="#151A1B" font-weight="500" text-anchor="middle">Cancel</text>
+    <text x="1012" y="541" fill="#1E5C5E" font-weight="500">Clear History…</text>
+    <text x="1132" y="541" fill="#A33A35" font-weight="500">Delete</text>
 
-    <text x="640" y="854" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">ADDRESS BAR STATES</text>
-    <rect x="640" y="866" width="258" height="30" rx="15" fill="#F5F8F9" stroke="#48D3AE" stroke-width="1.5"/>
-    <rect x="654" y="878" width="10" height="8" rx="2" fill="#16977C"/>
-    <path d="M656 878 v-2 a3 3 0 0 1 6 0 v2" fill="none" stroke="#16977C" stroke-width="1.6"/>
-    <text x="672" y="886" font-size="12" fill="#141E24">example.com · HTTPS</text>
-    <rect x="910" y="866" width="258" height="30" rx="15" fill="#FFF6E8" stroke="#E8A13A" stroke-width="1.5"/>
-    <path d="M928 874 l6 11 h-12 Z" fill="#E8A13A"/>
-    <text x="944" y="886" font-size="12" fill="#8A5A12">http only · blocked by default</text>
+    <rect x="760" y="580" width="400" height="36" fill="#EFEDE6"/>
+    <rect x="760" y="580" width="160" height="36" fill="#FBFAF7"/>
+    <line x1="760.5" y1="580" x2="760.5" y2="616" stroke="#DEDCD3"/>
+    <line x1="919.5" y1="580" x2="919.5" y2="616" stroke="#DEDCD3"/>
+    <text x="776" y="603" fill="#151A1B" font-weight="500">Active tab</text>
+    <text x="936" y="603" fill="#5A6264">Inactive tab</text>
+    <text x="1060" y="603" fill="#5A6264">Loading…</text>
 
-    <text x="640" y="940" font-size="11" font-weight="600" fill="#93A4AD" letter-spacing="0.6">FOCUS RING</text>
-    <rect x="640" y="952" width="120" height="30" rx="8" fill="#FFFFFF" stroke="#48D3AE" stroke-width="3"/>
-    <text x="700" y="972" fill="#141E24" text-anchor="middle">Focused</text>
+    <rect x="760.5" y="640.5" width="380" height="27" rx="6" fill="#FFFFFF" stroke="#DEDCD3"/>
+    <rect x="773" y="652" width="10" height="8" rx="1.5" fill="#1E5C5E"/>
+    <path d="M775 652 v-2 a3 3 0 0 1 6 0 v2" fill="none" stroke="#1E5C5E" stroke-width="1.5"/>
+    <text x="792" y="659" font-size="13" fill="#151A1B">example.com<tspan fill="#5A6264">/docs</tspan></text>
+
+    <rect x="760.5" y="680.5" width="380" height="27" rx="6" fill="#FFFFFF" stroke="#DEDCD3"/>
+    <text x="774" y="699" font-size="13" fill="#8A5A12">Not secure</text>
+    <text x="850" y="699" font-size="13" fill="#151A1B">http://example.org</text>
+
+    <rect x="760.5" y="726.5" width="112" height="31" rx="6" fill="#FFFFFF" stroke="#DEDCD3"/>
+    <rect x="757.5" y="723.5" width="118" height="37" rx="8.5" fill="none" stroke="#1E5C5E" stroke-width="2"/>
+    <text x="816" y="747" fill="#151A1B" font-weight="500" text-anchor="middle">Focused</text>
   </g>
 </svg>
