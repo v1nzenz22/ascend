@@ -1,18 +1,23 @@
 # ascend design
 
-Visual identity and UI template for ascend. Flat colour, Times for display, no gradients.
+Visual identity for ascend, the offline-first nutrition tracker. Flat colour, Times for display, no gradients.
 
-| File                                                               | What it is                                                                  |
-| ------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| [`tokens.json`](tokens.json)                                       | Source of truth for colors, light/dark theme, type, spacing, radii, sizes   |
-| [`logo/ascend-icon.svg`](logo/ascend-icon.svg)                     | App icon source: cropped white Times “a”, Big Sur grid (824 px tile)        |
-| [`history/`](history/)                                             | Every earlier design version, kept to show how the identity evolved         |
-| [`logo/ascend-mark.svg`](logo/ascend-mark.svg)                     | The “a” alone on transparent background (start page, about box, README)     |
-| [`template/ascend-window.svg`](template/ascend-window.svg)         | Browser window template: tabs, toolbar, side panel, start page (1440 × 900) |
-| [`template/ascend-styleguide.svg`](template/ascend-styleguide.svg) | Six-colour palette, type scale, buttons, tabs, address bar states           |
-| `export/*.png`                                                     | PNG renders of the files above                                              |
-| [`scripts/render-icon.swift`](scripts/render-icon.swift)           | Renders the icon and mark PNGs with exact glyph size and grain              |
-| [`../build/icon.icns`](../build/icon.icns)                         | Finished macOS icon (16–1024 px, @1x/@2x) for packaging in Phase 7          |
+> [!NOTE]
+> ascend started as a desktop browser. The window template and style guide
+> below come from that project and are kept unchanged as design history. The
+> app screens are designed next in FigCraft (`figcraft/`, Phase 2).
+
+| File                                                               | What it is                                                                |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| [`tokens.json`](tokens.json)                                       | Source of truth for colors, light/dark theme, type, spacing, radii, sizes |
+| [`logo/ascend-icon.svg`](logo/ascend-icon.svg)                     | App icon source: cropped white Times “a”, Big Sur grid (824 px tile)      |
+| [`history/`](history/)                                             | Every earlier design version, kept to show how the identity evolved       |
+| [`logo/ascend-mark.svg`](logo/ascend-mark.svg)                     | The “a” alone on transparent background (start page, about box, README)   |
+| [`template/ascend-window.svg`](template/ascend-window.svg)         | Browser-era window template (history): tabs, toolbar, side panel          |
+| [`template/ascend-styleguide.svg`](template/ascend-styleguide.svg) | Six-colour palette and type scale; components from the browser era        |
+| `export/*.png`                                                     | PNG renders of the files above                                            |
+| [`scripts/render-icon.swift`](scripts/render-icon.swift)           | Renders the icon and mark PNGs with exact glyph size and grain            |
+| [`../build/icon.icns`](../build/icon.icns)                         | macOS icon (16–1024 px, @1x/@2x), kept from the browser era               |
 
 ## Concept
 
@@ -25,10 +30,11 @@ Visual identity and UI template for ascend. Flat colour, Times for display, no g
   Mint appears only in the icon and selections. No gradients anywhere.
 - **Type:** Times New Roman for display (the mark, wordmark, start page), SF
   Pro for the interface. Both ship with macOS, so nothing is downloaded
-  (privacy rule 2). Times and dates use tabular figures.
+  (no CDN). Times and dates use tabular figures.
 - **Texture:** grain only on the icon and mark, never on UI text.
-- **Layout:** hairlines instead of shadows and cards. The start page shows the
-  mark, the address field and recently visited pages; no promotional numbers.
+- **Layout:** hairlines instead of shadows and cards; no promotional numbers
+  or decorative tiles. (The browser-era template applied this to a start
+  page; the app screens follow the same rule.)
 - **Accessibility:** every text pair meets WCAG AA (body text ≥ 4.5:1).
 
 ## Evolution
