@@ -11,7 +11,7 @@ tests before the next one starts.
 - Toolchain: Node 24 LTS via fnm, npm
 - UI inspiration: Vivaldi (panels, configurability)
 
-## Phase 1 – Project foundation 🚧
+## Phase 1 – Project foundation ✅
 
 - Repository, license, README, roadmap, `CLAUDE.md`
 - Claude Code subagents (privacy-auditor, ui-tester, reviewer), hooks and
