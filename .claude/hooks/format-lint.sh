@@ -5,12 +5,20 @@
 # problems with ESLint. Remaining lint errors are reported back to Claude
 # (exit code 2 + stderr) so it fixes them right away.
 #
-# Until the tooling is installed (Phase 1b), this hook does nothing.
+# If node or the tools are not installed, this hook does nothing.
 
 set -u
 
 project_dir="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 bin="$project_dir/node_modules/.bin"
+
+# Hooks do not load ~/.zshrc, so fnm's node may be missing from PATH.
+# Fall back to fnm's default Node installation.
+if ! command -v node >/dev/null 2>&1; then
+  fnm_default="$HOME/.local/share/fnm/aliases/default/bin"
+  [ -x "$fnm_default/node" ] && PATH="$fnm_default:$PATH"
+fi
+command -v node >/dev/null 2>&1 || exit 0
 
 file=$(jq -r '.tool_input.file_path // empty' 2>/dev/null) || exit 0
 [ -z "$file" ] && exit 0
