@@ -127,6 +127,8 @@ Also:
 - Small commits using Conventional Commits (`feat:`, `fix:`, `docs:`,
   `chore:`, `test:`, `refactor:`), with a scope where useful (`feat(ui): …`).
 - Run the `reviewer` subagent on the diff before committing code.
+- After every commit, push it right away (`git push`; remote `origin`,
+  private repo github.com/v1nzenz22/ascend). The user asked for this.
 - Never force-push. Never commit databases, captures or `.env` files.
 
 ## Subagents
