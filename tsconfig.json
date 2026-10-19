@@ -1,0 +1,29 @@
+{
+  // Type-checking settings for the whole project. Bundling is done by esbuild
+  // later (Phase 2), so tsc only checks types and never writes files.
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    // TODO(phase 2): split into per-process tsconfigs so only src/renderer
+    // gets DOM types; the main process must not use `window` or `document`.
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+
+    // Strictness: catch as many mistakes as possible before the app runs.
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": true,
+    "useUnknownInCatchVariables": true,
+
+    "noEmit": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src", "tests", "*.config.ts"]
+}

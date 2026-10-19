@@ -12,7 +12,7 @@ phases. Work one phase at a time; finish each with a build, a launch and tests.
 
 - Talk to the user in **German**.
 - Code, comments, commit messages and documentation are in **English**.
-- The user is learning. Explain *why* in comments and in chat, not just *what*.
+- The user is learning. Explain _why_ in comments and in chat, not just _what_.
   Prefer simple, readable code over clever code.
 
 ## Privacy rules (hard requirements – never break these)
