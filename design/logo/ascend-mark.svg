@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>ascend mark</title>
+  <!-- The glyph alone on a transparent background, for start page, about box, README. -->
+  <defs>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#48D3AE"/>
+      <stop offset="1" stop-color="#2275D6"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#mark)" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="166,206 256,116 346,206" stroke-width="52" stroke-opacity="0.75"/>
+    <polyline points="114,376 256,234 398,376" stroke-width="68"/>
+  </g>
+</svg>
