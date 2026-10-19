@@ -1,163 +1,116 @@
 # CLAUDE.md
 
-Guidance for Claude Code when working in this repository.
+本文件指导 Claude Code 在本仓库中的工作方式。
 
-## Project
+## 项目
 
-ascend is a private, local-first desktop browser for **macOS arm64 only**,
-built on Electron + TypeScript. See `README.md` for goals and `ROADMAP.md` for
-phases. Work one phase at a time; finish each with a build, a launch and tests.
+ascend 是一个面向所有人的极简卡路里与营养追踪应用。手机优先（先 iPhone），桌面浏览器中作为仪表盘使用。离线优先，零遥测，数据只存在用户设备本地。之前的浏览器项目已经放弃；`design/` 中的旧素材保留原样，作为设计历史。
 
-## Communication
+阶段计划见 `ROADMAP.md`。一次只做一个阶段，每个阶段结束都要构建、测试，再向用户汇报。
 
-- Talk to the user in **German**. The user calls you **Klot**.
-- Code, comments, commit messages and documentation are in **English**.
-- The user is learning. Explain _why_ in comments and in chat, not just _what_.
-  Prefer simple, readable code over clever code.
+## 语言规则（最重要）
 
-## Privacy rules (hard requirements – never break these)
+- 和用户的所有对话、提问、计划和汇报：**只用德语**。用户称呼你为 **Klot**。
+- 内部工作用**中文**：内部笔记、子代理之间的任务说明和交接、本文件、`.claude/agents/` 中的定义。
+- 代码、变量名、注释、提交信息：**英语**。仓库文档（README、ROADMAP、`docs/`）也用英语。
+- 应用界面：先做**德语**，所有文字走 i18n 模块，为多语言做好准备。
+- 用户是初学者：在聊天和注释中解释「为什么」，优先简单易读的代码。
 
-1. **Zero telemetry.** The browser, build scripts and dependencies must not
-   send usage data.
-2. **No external request without explicit user consent.** This includes update
-   checks, crash reports, and fonts or icons from CDNs. Bundle every asset
-   locally.
-3. **All data stays local.** History, bookmarks and settings are stored only on
-   this machine. No cloud sync.
-4. **HTTPS-only by default.**
-5. **Ad and tracker blocking** uses Brave's `adblock-rust` (`adblock-rs`) with
-   EasyList / EasyPrivacy (Phase 3).
+## 隐私与安全（硬性规则）
 
-If a change could cause a network request the user did not trigger, stop and
-ask first.
+1. **零遥测**：应用、构建脚本和依赖都不得发送使用数据；没有第三方追踪、分析或崩溃上报 SDK。
+2. **数据只存本地**：默认只存在设备的 IndexedDB 中，没有账号，没有云同步。
+3. **外部请求只能由用户主动触发**：例如点击「搜索」或扫码时请求 Open Food Facts。输入时不自动搜索；先查本地缓存。
+4. **不用 CDN**：字体用系统字体，wasm、图标等资源随应用一起部署。
+5. **密钥不进仓库**：代码和 Git 历史中不得有 API 密钥、token 或 `.env`。
+6. **仓库中没有个人数据**：没有真实姓名、邮箱（提交使用 GitHub noreply 地址）、主目录路径、非回环 IP。`.githooks/pre-commit` 会强制检查（每个克隆执行一次 `git config core.hooksPath .githooks`）。私人关键词写在 `.git/info/personal-patterns`，绝不写进被跟踪的文件。
 
-## Architecture (target for Phase 2)
+任何可能导致用户未触发的网络请求的改动：先停下来问用户。
 
-```
-BaseWindow
-├── UI view (WebContentsView)   – browser chrome: tabs, address bar, buttons
-│     └── preload/ui.ts          – narrow contextBridge API, typed IPC only
-└── Tab views (WebContentsView)  – one per tab, web content, NO preload
-main process
-├── TabManager                   – creates, switches, closes tab views
-├── history                      – SQLite in app.getPath('userData')
-└── ipc                          – validated handlers for UI requests
-```
+## 技术栈
 
-- **Main process** (`src/main/`): owns windows, tabs, storage and all
-  privileged work.
-- **Preload** (`src/preload/`): only for the UI view. Exposes a minimal,
-  typed API via `contextBridge`. Never expose `ipcRenderer` directly.
-- **Renderer** (`src/renderer/`): browser chrome in vanilla TypeScript,
-  HTML and CSS. No frameworks, no CDN assets; icons are inline SVG.
+- **PWA**：Vite + TypeScript（strict），不用 UI 框架。
+- **存储**：IndexedDB，通过 Dexie。
+- **离线**：vite-plugin-pwa（Workbox）生成 Service Worker 和 manifest。
+- **条形码**：`barcode-detector`（zxing-wasm），wasm 文件自托管。
+- **图表**：自己用 SVG 绘制，不引入图表库。
+- **i18n**：自建小模块 + `Intl`（日期、数字、单位）。
+- **测试**：vitest（逻辑）、Playwright（iPhone/WebKit、桌面/Chromium、离线）。
+- **外部数据**：Open Food Facts（ODbL）。必须显示署名 "Contains data from Open Food Facts"，单位以 `_100g` 字段为准，kcal 缺失时由 kJ ÷ 4.184 换算。
 
-## Directory layout
+上述依赖在对应阶段由用户批准后才安装（见下文「依赖」）。
+
+## 目录结构（第 2 阶段起逐步建立）
 
 ```
-src/main/        Electron main process
-src/preload/     Preload scripts (UI view only)
-src/renderer/    Browser chrome (HTML/CSS/TS)
-tests/e2e/       Playwright tests driving Electron
-.claude/         Agents, hooks and settings for Claude Code
+src/            应用代码（app、db、i18n、features/*、ui/*）
+src/i18n/       翻译文件（de 为默认）
+public/         图标、manifest 资源、自托管 wasm
+tests/unit/     vitest 测试
+tests/e2e/      Playwright 测试；tests/fixtures/ 放模拟的 OFF 响应
+docs/design/    architect 写的设计文档（英文）
+design/         Logo、设计 token、模板、设计历史（不要修改旧素材）
+design/figcraft FigCraft 设计文件与导出
+.claude/        子代理、钩子、技能、设置
+.githooks/      防止个人数据进入仓库的提交钩子
 ```
 
-`src/` and `tests/` are created in Phase 2.
-
-## Commands
-
-Available after Phase 1b / Phase 2:
+## 常用命令
 
 ```
-npm run build      # bundle main, preload and renderer with esbuild
-npm start          # build and launch the app
-npm run lint       # eslint
+npm run check      # typecheck + lint + 格式检查
 npm run format     # prettier --write
-npm run typecheck  # tsc --noEmit
-npm run test:e2e   # Playwright end-to-end tests against Electron
+npm run dev        # Vite 开发服务器（第 2 阶段起）
+npm run build      # 生产构建（第 2 阶段起）
+npm test           # vitest（第 2 阶段起）
+npx playwright test  # 界面测试（第 2 阶段起）
+bash .claude/hooks/test.sh  # 钩子回归测试
 ```
 
-Node version is pinned in `.node-version` (use `fnm use`).
+Node 版本固定在 `.node-version`（24，用 fnm）。GUI 应用和钩子不加载 `~/.zshrc`，需要时使用 fnm 默认路径 `${HOME}/.local/share/fnm/aliases/default/bin`。
 
-## Electron security rules
+## 编码规范
 
-Every `WebContentsView` / `BrowserWindow` must use:
+- TypeScript strict；不用 `any`（无法避免时注释原因）；小模块，一个模块一件事。
+- UI 文本全部走 i18n；日期和数字用 `Intl`；德语小数逗号要能正确输入。
+- 营养数据保存快照：记录里复制当时的营养值，修改食物不会改变历史。
+- 目标没有预设值，由用户自己设置。
+- 无障碍：语义化 HTML、图标按钮 `aria-label`、可见的 `:focus-visible`、对比度 ≥ 4.5:1。参考 `.claude/skills/web-design-guidelines/guidelines.md`。
+- 外部数据和用户输入只用 `textContent` 渲染，不用 `innerHTML`。
+- 设计以 `design/tokens.json` 为准：平面颜色，无渐变，系统字体。
+- 修改后 PostToolUse 钩子自动运行 Prettier 和 ESLint。
 
-- `sandbox: true`, `contextIsolation: true`, `nodeIntegration: false`
-- `webSecurity: true`, no `allowRunningInsecureContent`
-- No `preload` for web content views
+## 依赖
 
-Also:
+- 添加任何依赖前：向用户说明用途和许可证，获得批准；先让 `security-reviewer` 检查。
+- 许可证必须与 MPL-2.0 兼容（MIT、BSD、Apache-2.0、ISC、MPL-2.0）。
+- 版本精确锁定（`.npmrc` 中 `save-exact=true`），提交 `package-lock.json`。
 
-- Validate every IPC message in the main process (types, URL schemes).
-  Accept only `http:` and `https:` navigations from the UI (`about:blank` aside).
-- Handle `setWindowOpenHandler` (open as new tab or deny) and `will-navigate`.
-- Deny permission requests by default (`setPermissionRequestHandler`).
-- Disable the spellchecker dictionary download (it contacts Google).
-- Never load remote code into the UI view.
+## 工作方式与子代理
 
-## Crash reports
+主会话只负责协调、决策和用德语向用户汇报。尽量把工作委派给子代理；互不依赖的任务并行执行。给子代理的任务说明用中文，写清文件范围和完成标准。
 
-- Start `crashReporter` with `uploadToServer: false` and no `submitURL`.
-  Minidumps stay in `app.getPath('crashDumps')`.
-- Log uncaught exceptions and unhandled rejections (main and renderer) to a
-  local file under `userData/logs/`. No page content or full URLs in logs;
-  keep the origin at most.
-- Retention: keep the last 20 reports, delete anything older than 30 days.
-- Sending is **only** a user action: the user exports a report to a file they
-  choose and shares it themselves. Before export, warn that a minidump can
-  contain memory contents (e.g. visited pages). There is no built-in upload.
+| 子代理              | 用途                                                           |
+| ------------------- | -------------------------------------------------------------- |
+| `researcher`        | 只读调研（API、库、许可证、平台限制），附来源                  |
+| `architect`         | 技术方案和数据模型，给出选项和推荐，写 `docs/design/`          |
+| `implementer`       | 按已批准的计划实现，带测试，不提交                             |
+| `security-reviewer` | 存储、密钥、权限、依赖、隐私；每个阶段结束和每次添加依赖时运行 |
+| `reviewer`          | 每次提交前审查 diff                                            |
+| `ui-tester`         | Playwright：iPhone 尺寸、桌面仪表盘、离线模式                  |
+| `bug-hunter`        | 阶段结束后全代码库找 bug                                       |
+| `docs-writer`       | README、ROADMAP、应用内说明文字                                |
 
-## Coding conventions
-
-- TypeScript `strict` mode. No `any` unless it is unavoidable and commented.
-- Small modules with one job each. Name things after what they do.
-- Handle errors explicitly; never swallow them silently.
-- Format with Prettier, lint with ESLint. The PostToolUse hook runs both
-  automatically after each edit.
-
-## Dependencies
-
-- **Ask the user before adding any dependency**, and state the reason and the
-  license.
-- Licenses must be compatible with MPL-2.0 (MIT, BSD, Apache-2.0, ISC,
-  MPL-2.0 are fine). No GPL code in the app.
-- Pin exact versions (`save-exact=true` in `.npmrc`) and commit
-  `package-lock.json`.
-- Check new packages for telemetry and postinstall network access.
-
-## Code reuse and reverse engineering
-
-- Copy only open-source code with a compatible license, and keep its notice.
-- Never decompile closed-source browsers to copy code (German UrhG §69e allows
-  decompilation only in very narrow cases).
-- REA (github.com/morluto/rea, npm `rea-agents`) is used only to study app
-  behavior and to audit **our own** builds. Install it only from official
-  sources; a trojanized look-alike repository exists.
+标准流程：`architect` 设计 → 用户确认 → `implementer` 实现 → `ui-tester` 测试 → `reviewer` + `security-reviewer` 审查 → 主会话提交并推送 → 用德语汇报。
 
 ## Git
 
-- Small commits using Conventional Commits (`feat:`, `fix:`, `docs:`,
-  `chore:`, `test:`, `refactor:`), with a scope where useful (`feat(ui): …`).
-- Run the `reviewer` subagent on the diff before committing code.
-- After every commit, push it right away (`git push` to `origin`, a private
-  GitHub repo). The user asked for this.
-- Never force-push. Never commit databases, captures or `.env` files.
-- **No personal data in the repo or its history**: no real names, email
-  addresses (commits use the GitHub `noreply` address), usernames, home-folder
-  paths (`/Users/…`; use `${HOME}` or relative paths), IP addresses other than
-  loopback, machine names, or file metadata that contains any of these. Check
-  `git diff --staged` for them before every commit.
-- `.githooks/pre-commit` enforces this (enable once per clone with
-  `git config core.hooksPath .githooks`). Private terms such as real names go
-  in `.git/info/personal-patterns`, never in a tracked file.
+- 小步提交，Conventional Commits（`feat:`、`fix:`、`docs:`、`chore:`、`test:`、`refactor:`），合适时加 scope。
+- 每次提交后立即 `git push` 到 `origin`（私有 GitHub 仓库）。这是用户的要求。
+- 绝不 force push，未经用户同意绝不改写 Git 历史。
+- 不提交数据库文件、导出数据、`.env`。
 
-## Subagents
+## 设计工具
 
-- `privacy-auditor` – captures traffic with TShark and inspects builds with
-  REA; reports every unexpected network request.
-- `ui-tester` – runs Playwright UI tests against the Electron app.
-- `reviewer` – code and security review of the diff before each commit.
-- `bug-hunter` – sweeps the whole codebase for reproducible bugs (after each
-  phase or larger feature).
-- `security-auditor` – audits the whole codebase for vulnerabilities, focused
-  on untrusted web content reaching privileged code (after each phase).
+- DesignCraft 和 FigCraft（ArtCraft 套件，开源 MIT/Apache-2.0）通过各自的 CLI MCP 服务器使用，只在本地注册，读取范围 `design/`，写入范围分别是 `design/designcraft/` 和 `design/figcraft/`。
+- 只在用户选择时才使用在线分享功能。
