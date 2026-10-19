@@ -1,74 +1,67 @@
 # Roadmap
 
-Phases are done in order. Each phase ends with a verified build, a launch and
-tests before the next one starts.
+Phases are done in order. Each phase ends with a build, tests and a review
+before the next one starts.
 
-## Phase 0 – Key decisions ✅
+## Phase 0 – Decisions ✅
 
-- Engine: Electron + TypeScript; Rust only where it pays off (e.g. `adblock-rs`)
-- Platform: macOS arm64 only
+- Product: a minimal calorie and nutrition tracker for everyone
+- Platform: progressive web app; iPhone first, desktop browser as dashboard
+- Data: local only (IndexedDB), no account; each device keeps its own data
+- Stack: Vite, TypeScript, Dexie, vite-plugin-pwa, barcode-detector, Vitest,
+  Playwright
 - License: MPL-2.0
-- Toolchain: Node 24 LTS via fnm, npm
-- UI inspiration: Vivaldi (panels, configurability)
+- The earlier browser project is discontinued; its design work stays in
+  `design/history/`
 
-## Phase 1 – Project foundation ✅
+## Phase 1 – Foundation ✅
 
-- Repository, license, README, roadmap, `CLAUDE.md`
-- Claude Code subagents (privacy-auditor, ui-tester, reviewer), hooks and
-  permissions
-- TypeScript, ESLint and Prettier
-- MCP server: Playwright (Context7 left out: it is a remote service)
+- Remove browser-specific code and agents
+- New project guide, README and roadmap
+- Claude Code agents: researcher, architect, implementer, security-reviewer,
+  reviewer, ui-tester, bug-hunter, docs-writer
+- Hooks for formatting, linting, blocking dangerous commands and keeping
+  personal data out of the repository
 
-## Phase 2 – Minimal working browser
+## Phase 2 – App skeleton
 
-- One window with tabs, an address bar, back / forward / reload
-- Local history in SQLite
-- Hardened defaults: sandboxed tabs, context isolation, no preload in web
-  content, permission requests denied by default, no spellcheck dictionary
-  download, no default search engine
-- Local crash reports: native crashes (Crashpad minidumps) and uncaught
-  JavaScript errors are saved on this machine only, never uploaded. A menu
-  entry shows them in Finder and can export one to a file the user picks.
-  Old reports are deleted automatically (keep the last 20, at most 30 days).
-- Builds, launches and passes Playwright end-to-end tests
+- Vite + TypeScript app, installable as a PWA, starts offline
+- Design tokens as CSS variables; German interface through an i18n module
+- Local database schema (foods, entries, goals, settings)
+- Playwright projects: iPhone (WebKit), desktop (Chromium), offline
+- Choose HTTPS hosting for testing on the iPhone
+- Design in FigCraft: foundations, components, iPhone screens, desktop
+  dashboard
 
-## Phase 3 – Blocking and HTTPS
+## Phase 3 – Core
 
-- Ad and tracker blocking with `adblock-rs` + EasyList / EasyPrivacy
-  (filter lists only downloaded after explicit consent)
-- Enforced HTTPS-only mode with a per-site exception prompt
-- Optional, user-chosen search engine (none by default)
+- Today view: totals against your goals
+- Log food by hand with portions; keep your own foods
+- Daily goals for calories and macronutrients, with no preset values
+- Desktop dashboard: day and week views with simple charts
+- JSON backup (export and import), because iOS can clear web app data in rare
+  cases
 
-## Phase 4 – Isolation
+## Phase 4 – Online food data
 
-- Per-site cookie isolation (separate Electron session partitions)
-- Profiles / containers
-- Anti-fingerprinting (user agent, canvas, WebGL, fonts, screen metrics)
+- Search Open Food Facts on demand (never while typing) and scan barcodes
+- Convert kJ to kcal when needed; check values for plausibility
+- Cache results on the device; show the Open Food Facts attribution
+- A setting to keep the app fully offline
 
-## Phase 4b – Encrypted profile data
+## Later
 
-- Encrypt history, bookmarks and settings at rest with SQLCipher
-- Encryption key stored in the macOS Keychain
-
-## Phase 5 – Look and feel
-
-- Vivaldi-style side panels (history, bookmarks, notes)
-- Themes, configurable keyboard shortcuts
-- Optional vertical tabs and a minimal layout
-
-## Phase 6 – Network audit
-
-- Full audit of the built app with REA (binary analysis) and TShark
-  (traffic capture)
-- Documented result: every outgoing connection is user-initiated
-
-## Phase 7 – Packaging and updates
-
-- Signed `.app` / `.dmg` for macOS arm64
-- Updates are manual or self-hosted; no automatic update checks
-
-## Phase 8 – Local AI
-
-- Optional page summaries and Q&A using a model running on this machine
-  (e.g. Ollama on `localhost`)
-- Off by default; no content ever leaves the device
+1. **Workout log:** exercises, sets, repetitions, weight.
+2. **Import activities, locally and without a server:** Strava account export
+   (`activities.csv`, FIT/GPX files) and the Apple Health export. The Strava
+   API stays optional: it needs a small server for the client secret, allows
+   caching for at most 7 days, forbids AI use, and limits new apps to one
+   athlete.
+3. **Full data export:** JSON and CSV.
+4. **More languages.**
+5. **App Store version** (Capacitor or Expo). Needed for Apple Health
+   (HealthKit) and Android Health Connect.
+6. **Fitbit through the Google Health API.** The Fitbit Web API shuts down on
+   30 October 2026. Restricted scopes, Google verification and a server are
+   required, so this has low priority.
+7. **Optional sync** between devices, end-to-end encrypted.
