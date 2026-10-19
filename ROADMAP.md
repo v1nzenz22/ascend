@@ -17,7 +17,7 @@ tests before the next one starts.
 - Claude Code subagents (privacy-auditor, ui-tester, reviewer), hooks and
   permissions
 - TypeScript, ESLint and Prettier
-- MCP servers: Playwright, Context7
+- MCP server: Playwright (Context7 left out: it is a remote service)
 
 ## Phase 2 – Minimal working browser
 
