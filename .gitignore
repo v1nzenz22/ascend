@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+out/
+dist/
+*.tsbuildinfo
+
+# Local data – never commit browsing data or databases
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Test and audit artifacts
+test-results/
+playwright-report/
+*.pcap
+*.pcapng
+
+# Secrets
+.env
+.env.*
+
+# Claude Code local overrides
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
