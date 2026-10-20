@@ -23,18 +23,20 @@ before the next one starts.
 - Hooks for formatting, linting, blocking dangerous commands and keeping
   personal data out of the repository
 
-## Phase 2 – App skeleton
+## Phase 2 – App skeleton ✅
 
 - Vite + TypeScript app, installable as a PWA, starts offline
 - Design tokens as CSS variables; German interface through an i18n module
 - Local database schema (foods, entries, goals, settings)
 - Playwright projects: iPhone (WebKit), desktop (Chromium), offline
-- Choose HTTPS hosting for testing on the iPhone
+- Hosting decided: Cloudflare Pages, set up later (see Phase 3)
 - Design in FigCraft: foundations, components, iPhone screens, desktop
   dashboard
 
 ## Phase 3 – Core
 
+- Deploy to Cloudflare Pages for testing on the iPhone (HTTPS; headers
+  `frame-ancestors 'none'` and `Cache-Control: no-cache` for `sw.js`)
 - Today view: totals against your goals
 - Log food by hand with portions; keep your own foods
 - Daily goals for calories and macronutrients, with no preset values
