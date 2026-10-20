@@ -4,8 +4,9 @@
 // Usage (from the repo root, macOS only, no dependencies):
 //   swift design/scripts/render-icon.swift design/export
 //
-// Writes ascend-icon-1024.png (app icon, transparent corners) and
-// ascend-mark-512.png (the grainy "a" alone, transparent background).
+// Writes ascend-icon-1024.png (app icon, transparent corners),
+// ascend-mark-512.png (the grainy "a" alone, transparent background) and
+// ascend-icon-web-1024.png (full-bleed square for iOS and PWA icons).
 // The grain uses a fixed seed, so every run produces identical pixels.
 
 import AppKit
@@ -192,6 +193,28 @@ func renderIcon() -> NSBitmapImageRep {
   return rep
 }
 
+// MARK: - Web icon (1024 px, full-bleed square for iOS / PWA)
+
+/// Same "a" at the same pixel position as the app icon, but the mint fills
+/// the whole square: no margin, no rounded corners, no drop shadow, no
+/// transparency. iOS fills transparent pixels with black and rounds the
+/// corners itself, and maskable PWA icons must cover the full canvas (the
+/// platform cuts the shape). Because the glyph is not rescaled, the maskable
+/// safe zone (a centred circle with 80 % of the width, 819 px) shows about
+/// what the 824 px macOS tile shows: the arch, the bowl and the stem.
+func renderWebIcon() -> NSBitmapImageRep {
+  let size = 1024
+  let rep = makeBitmap(size)
+  withContext(rep) { ctx in
+    tileColor.setFill()
+    NSRect(x: 0, y: 0, width: size, height: size).fill()
+    let a = glyphPath("a", inkHeight: glyphInkHeight, center: glyphCenter)
+    fillWithInnerShadow(a, color: glyphColor, in: ctx)
+  }
+  addGrain(to: rep, seed: 0xA5CE_0D03)
+  return rep
+}
+
 // MARK: - Mark (512 px, the "a" alone)
 
 func renderMark() -> NSBitmapImageRep {
@@ -211,6 +234,7 @@ let outDir = URL(
 do {
   try writePNG(renderIcon(), to: outDir.appendingPathComponent("ascend-icon-1024.png"))
   try writePNG(renderMark(), to: outDir.appendingPathComponent("ascend-mark-512.png"))
+  try writePNG(renderWebIcon(), to: outDir.appendingPathComponent("ascend-icon-web-1024.png"))
 } catch {
   FileHandle.standardError.write("render-icon failed: \(error)\n".data(using: .utf8)!)
   exit(1)

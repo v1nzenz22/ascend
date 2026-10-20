@@ -16,6 +16,7 @@ Visual identity for ascend, the offline-first nutrition tracker. Flat colour, Ti
 | [`template/ascend-window.svg`](template/ascend-window.svg)         | Browser-era window template (history): tabs, toolbar, side panel          |
 | [`template/ascend-styleguide.svg`](template/ascend-styleguide.svg) | Six-colour palette and type scale; components from the browser era        |
 | `export/*.png`                                                     | PNG renders of the files above                                            |
+| `export/ascend-icon-web-1024.png`                                  | Full-bleed square icon for iPhone and PWA (no margin, corners or shadow)  |
 | [`scripts/render-icon.swift`](scripts/render-icon.swift)           | Renders the icon and mark PNGs with exact glyph size and grain            |
 | [`../build/icon.icns`](../build/icon.icns)                         | macOS icon (16–1024 px, @1x/@2x), kept from the browser era               |
 
@@ -90,3 +91,21 @@ sips -s format png template/ascend-styleguide.svg --out export/ascend-styleguide
 show the grain. To rebuild `build/icon.icns`, scale the
 1024 PNG to 16, 32, 128, 256 and 512 px (plus @2x) into an `ascend.iconset`
 folder with `sips -z` and run `iconutil -c icns ascend.iconset`.
+
+### Web app icons
+
+The script also writes `export/ascend-icon-web-1024.png`: the same white "a"
+at the same position, but the mint fills the whole square (no transparent
+margin, no rounded corners, no drop shadow). iOS fills transparent pixels
+with black and rounds the corners itself, and maskable PWA icons must cover
+the full canvas. Inside the maskable safe zone (a centred circle with 80 % of
+the width) you see about what the macOS tile shows.
+
+After changing it, scale it into the app's icons (macOS only, uses `sips`):
+
+```sh
+npm run icons   # writes public/icons/{icon-192,icon-512,apple-touch-icon-180}.png
+```
+
+The PNGs in `public/icons/` are committed; the build never regenerates them.
+`icon-512.png` serves as both the "any" and the "maskable" manifest icon.
