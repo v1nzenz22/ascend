@@ -44,6 +44,35 @@ export default defineConfig(
   },
 
   {
+    // The write boundary: only the data layer (src/db/) may touch the
+    // database object. Everything else reads and writes through the
+    // functions in src/db/*.ts, so every write passes src/db/write.ts.
+    // Tests (tests/) may still use `db` directly to prepare data.
+    files: ["src/**/*.ts"],
+    ignores: [
+      "src/db/**",
+      // Temporary: main.ts still calls `db.open()`. It switches to
+      // `openDatabase()` from src/db/lifecycle.ts in work package P2; then
+      // this line goes.
+      "src/main.ts",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/db/db", "**/db/db.ts"],
+              message:
+                "Only src/db/ may use the database directly. Use the functions in src/db/*.ts (writes go through write.ts).",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
     // Plain JavaScript config files have no type information to check.
     files: ["**/*.js"],
     ...tseslint.configs.disableTypeChecked,

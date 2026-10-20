@@ -11,6 +11,12 @@
 import type { Nutrients } from "../domain/nutrients";
 import type { LocalDate } from "../lib/local-date";
 
+/**
+ * The fixed meals of a day, in display order (see src/domain/meals.ts).
+ * English identifiers; the German labels come from i18n.
+ */
+export type Meal = "breakfast" | "lunch" | "dinner" | "snacks";
+
 /** Values are per 100 g or per 100 ml. */
 export type FoodUnit = "g" | "ml";
 
@@ -51,8 +57,14 @@ export interface Entry {
   id: string;
   /** The day the food counts for, in the user's local calendar. */
   date: LocalDate;
-  /** When it was logged; sorts entries within a day. */
+  /** When it was logged; sorts entries within a day. Set once, never edited. */
   loggedAt: string;
+  /**
+   * Minutes from `Date#getTimezoneOffset()` at logging time (e.g. -120 in
+   * German summer time). Together with `loggedAt` it gives the local clock
+   * time of logging, for later "when do you log" insights. Set once.
+   */
+  loggedTzOffset: number;
   /** Link to the source food. Never used to read values (see `snapshot`). */
   foodId?: string;
   snapshot: EntrySnapshot;
@@ -60,6 +72,7 @@ export interface Entry {
   amount: number;
   /** Optional, for display ("2 × 1 Scheibe"). */
   portionLabel?: string;
+  meal: Meal;
   updatedAt: string;
 }
 
@@ -82,6 +95,10 @@ export interface Goal {
 /** Every setting with its value type. Display preferences only, never goals. */
 export interface SettingsMap {
   energyUnit: "kcal" | "kJ";
+  /** "system" follows the device's light/dark setting. */
+  theme: "system" | "light" | "dark";
+  /** True once the user chose "Ohne Ziel loslegen". Hides the intro, sets no goal. */
+  goalsIntroDismissed: boolean;
 }
 
 export type SettingKey = keyof SettingsMap;
