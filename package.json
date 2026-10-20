@@ -9,11 +9,21 @@
     "node": ">=24"
   },
   "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "icons": "bash scripts/generate-icons.sh",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run typecheck && npm run lint && npm run format:check"
+    "check": "npm run typecheck && npm run lint && npm run format:check",
+    "check:dist": "bash scripts/check-dist-urls.sh",
+    "test:scripts": "bash scripts/check-dist-urls.test.sh",
+    "verify": "npm run check && npm test && npm run test:scripts && npm run build && npm run check:dist"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
