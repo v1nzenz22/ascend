@@ -180,10 +180,16 @@ Initial keys (Phase 2): `app.name`, `app.description`, `nav.label`,
 | `formatGrams(n)` / `formatMillilitres(n)`         | `Intl.NumberFormat` with `style: 'unit', unit: 'gram' / 'milliliter'`                                  | `25` → `25 g`                  |
 | `formatEnergy(kcal, unit: 'kcal' \| 'kJ')`        | Number via `Intl.NumberFormat` (0 decimals) + non-breaking space + `t('unit.kcal')`. kJ = kcal × 4.184 | `250` → `250 kcal`, `1.046 kJ` |
 | `formatDate(localDate, style: 'long' \| 'short')` | `Intl.DateTimeFormat` with `dateStyle`, on the `Date` from `parseLocalDate()`                          | `20. Oktober 2026`, `20.10.26` |
+| `formatForInput(n)`                               | `Intl.NumberFormat` with `useGrouping: false`, up to 3 decimals; for pre-filling input fields          | `1234.5` → `1234,5`            |
 
 Important: **`Intl` has no `kilocalorie` / `kilojoule` unit** (not in the
 ECMA-402 list of sanctioned units), so energy units come from the message
 file. Formatters are created once and reused (creating `Intl` objects is slow).
+All number formatters use `signDisplay: 'negative'`, so `-0` (and values that
+round to 0) show as `0`. `NaN` and `±Infinity` show `t('number.unknown')`
+(`–`); `formatForInput` returns an empty string for them.
+`parseDecimal(formatForInput(x)) === x` holds for every `x ≥ 0` with at most
+three decimals, because `formatForInput` never writes a thousands dot.
 Tests must expect ` ` (non-breaking space) where `Intl` emits it.
 
 ### D4 – Parsing decimal input (`src/i18n/parse-decimal.ts`)
@@ -197,8 +203,10 @@ Tests must expect ` ` (non-breaking space) where `Intl` emits it.
 **Recommendation: A.** Signature:
 `parseDecimal(input: string): number | null` (`null` = not a valid amount).
 
-Rules: trim whitespace; allowed shape `digits [separator digits]` with at
-least one digit; no sign, no exponent, no grouping; result must be finite.
+Rules: trim whitespace; at most 32 characters after trimming; allowed shape
+`digits [separator digits]` with at least one digit; no sign, no exponent, no
+grouping; result must be finite. The regex `/^(\d*)(?:[.,](\d*))?$/` runs in
+linear time (no backtracking on long pasted input).
 
 | Input      | Result | Input        | Result |
 | ---------- | ------ | ------------ | ------ |
@@ -559,7 +567,7 @@ Hash names are English (identifiers); visible labels come from i18n.
 | `orientation`              | not set (desktop and landscape allowed)                                                                    |
 | `theme_color`              | `#FBFAF7` (`theme.light.windowBackground`)                                                                 |
 | `background_color`         | `#FBFAF7`                                                                                                  |
-| `icons`                    | `icons/icon-192.png` (any), `icons/icon-512.png` (any), `icons/icon-maskable-512.png` (maskable)           |
+| `icons`                    | `icons/icon-192.png` (any), `icons/icon-512.png` (any), `icons/icon-512.png` again (maskable)              |
 
 `index.html` additionally has:
 
@@ -609,11 +617,12 @@ cannot be used as is:
   SRC=design/export/ascend-icon-web-1024.png
   sips -z 192 192 "$SRC" --out public/icons/icon-192.png
   sips -z 512 512 "$SRC" --out public/icons/icon-512.png
-  sips -z 512 512 "$SRC" --out public/icons/icon-maskable-512.png
   sips -z 180 180 "$SRC" --out public/icons/apple-touch-icon-180.png
   ```
 
-- The four PNGs are committed (a few tens of kB each).
+- The three PNGs are committed. `icon-512.png` is listed twice in the
+  manifest (purpose `any` and purpose `maskable`, as two entries) instead of
+  shipping an identical `icon-maskable-512.png`.
 
 ### D17 – Service worker update strategy
 
@@ -629,16 +638,23 @@ is needed (CSP).
 
 Workbox settings:
 
-- `globPatterns: ['**/*.{html,js,css,png,svg,webmanifest}']` – precache the
-  whole app shell (it is small).
+- `globPatterns: ['**/*.{html,js,css,png,svg,wasm}']` – precache the whole
+  app shell (it is small). `wasm` is listed for the barcode scanner
+  (Phase 4). `webmanifest` is deliberately not listed: vite-plugin-pwa adds
+  `manifest.webmanifest` to the precache itself, and listing it would
+  precache it twice.
 - `navigateFallback: 'index.html'`, `cleanupOutdatedCaches: true`.
 - `runtimeCaching`: **none**. Open Food Facts caching comes in Phase 4.
 - Google Analytics offline module: **off** (default; never enable).
 - `devOptions.enabled: false`: no service worker in `npm run dev` (avoids
   stale-cache confusion while developing). The SW exists only in
   `build`/`preview`.
-- `includeAssets: ['icons/apple-touch-icon-180.png']` so the iOS icon is
-  precached too (manifest icons are included automatically).
+- No `includeAssets`, and `includeManifestIcons: false`: every icon in
+  `public/icons/` (including `apple-touch-icon-180.png`) is a PNG and is
+  already precached by `globPatterns`. The plugin's own icon handling would
+  list each icon a second time.
+- `skipWaiting: true`, `clientsClaim: true`, `inlineWorkboxRuntime: true`,
+  `mode: 'production'`, `disableDevLogs: true`, `sourcemap: false`.
 
 ## 9. Security: Content Security Policy
 
@@ -763,8 +779,8 @@ New files unless marked _(modify)_.
 | 28  | `design/export/ascend-icon-web-1024.png`      | Rendered full-bleed source icon                                                                               |
 | 29  | `scripts/generate-icons.sh`                   | `sips` resize into `public/icons/` (macOS, run manually)                                                      |
 | 30  | `public/icons/icon-192.png`                   | Manifest icon                                                                                                 |
-| 31  | `public/icons/icon-512.png`                   | Manifest icon                                                                                                 |
-| 32  | `public/icons/icon-maskable-512.png`          | Manifest maskable icon                                                                                        |
+| 31  | `public/icons/icon-512.png`                   | Manifest icon (`any` and `maskable`)                                                                          |
+| 32  | _(removed)_                                   | `icon-maskable-512.png` was identical to `icon-512.png`                                                       |
 | 33  | `public/icons/apple-touch-icon-180.png`       | iOS home-screen icon                                                                                          |
 | 34  | `playwright.config.ts`                        | webServer on preview, projects `iphone`, `desktop`, `offline`                                                 |
 | 35  | `tests/unit/i18n.test.ts`                     | see §10                                                                                                       |
@@ -828,3 +844,30 @@ Each commit must pass `npm run check` and `npm test`; the last two also
    body 17, heading 20, title 28, display 48; form fields ≥ 16 px) and use
    the current sizes only for the desktop layout; final values follow the
    FigCraft design.
+
+## Deferred to Phase 3
+
+Found in the Phase 2 reviews (reviewer, security-reviewer, bug-hunter) and
+deliberately left for Phase 3, when the first real forms and data exist:
+
+- **Service worker updates:** switch to `registerType: 'prompt'` with a
+  "new version – reload" message, or reload automatically when a lazily
+  loaded chunk fails after an update (D17 option B). Today a new version
+  takes over in the background, which is harmless only while there are no
+  forms with unsaved input.
+- **Dexie `versionchange` / `blocked`:** when a newer schema version opens in
+  another tab, close this tab's connection and ask the user to reload, instead
+  of blocking the upgrade or failing silently.
+- **Recompute "today"** on `visibilitychange` and `pageshow`: a home-screen
+  app can stay open across midnight and would otherwise keep showing
+  yesterday.
+- **`persist()` errors:** wrap `navigator.storage.persist()` /
+  `persisted()` in `try/catch` (some browsers reject in private mode) and
+  treat a failure as "not-persisted".
+- **HTTP headers on the host** (once hosting is decided, §11):
+  `Content-Security-Policy` as a header with `frame-ancestors 'none'` (not
+  possible in a `<meta>` CSP), and `Cache-Control: no-cache` for `sw.js` so
+  updates are found quickly.
+- **`workbox-window`:** decide whether the dev dependency stays (needed for a
+  prompt-based update flow) or is removed (unused with `injectRegister:
+'script'`).
