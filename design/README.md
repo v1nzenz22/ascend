@@ -50,10 +50,11 @@ identity got here.
 | v0.3    | <img src="history/v0.3/ascend-icon-1024.png" width="72" alt>   | Flat colour, no gradients. A large ink “a”; the UI drops cards for hairlines. |
 | v0.4    | <img src="history/v0.4/ascend-icon-1024.png" width="72" alt>   | The “a” turns white, outgrows the tile and gets an inner shadow.              |
 | v0.5    | <img src="history/v0.5/ascend-icon-1024.png" width="72" alt>   | Larger still and cropped at the bottom: only the arch and bowl remain.        |
-| v0.5.1  | <img src="history/v0.5.1/ascend-icon-1024.png" width="72" alt> | More grain in the mint tile; the white “a” stays clean. Current.              |
+| v0.5.1  | <img src="history/v0.5.1/ascend-icon-1024.png" width="72" alt> | More grain in the mint tile; the white “a” stays clean.                       |
+| v0.5.2  | <img src="history/v0.5.2/ascend-icon-1024.png" width="72" alt> | Coarser grain on the mint tile, visible on the home screen too. Current.      |
 
 Window and style guide renders for v0.1 to v0.3 are in the same folders; v0.4
-to v0.5.1 changed only the icon.
+to v0.5.2 changed only the icon.
 
 ### Font license note
 

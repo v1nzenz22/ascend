@@ -24,11 +24,20 @@ let tileColor = srgb(0xA8DCD2)  // mint
 let inkColor = srgb(0x151A1B)  // ink (mark)
 let glyphColor = srgb(0xFFFFFF)  // the icon's "a"
 let fontName = "TimesNewRomanPSMT"
-// Grain is max +/- change per channel (0-255), in two layers: a strong pass on
-// the bare mint tile (drawn before the "a", so the white glyph covers it), then
-// a light pass over everything. The mint gets visible texture even at small
-// sizes, while the white "a" stays almost clean.
-let tileGrainStrength: Double = 30
+// Grain is max +/- change per channel (0-255). The bare mint tile gets its own
+// grain first (drawn before the "a", so the white glyph covers it), then a
+// light per-pixel pass goes over everything, so the white "a" stays almost
+// clean.
+//
+// Per-pixel grain averages out when the icon is scaled down to 60-180 px
+// (each small pixel mixes ~6-17 big ones), so the mint looked flat on the
+// home screen. The tile grain is therefore coarse: random values on a grid
+// of `tileGrainCell` px, blended smoothly (bilinear) between grid points so
+// it reads as soft grain, not as square mosaic blocks.
+// 4 px keeps about 2.5x more texture than per-pixel grain at 64-180 px;
+// strength 24 keeps the full-size mint calmer than the old per-pixel 30.
+let tileGrainCell = 4
+let tileGrainStrength: Double = 24
 let grainStrength: Double = 16
 let glyphInkHeight: CGFloat = 1080  // the tile is 824 px: the "a" overflows it
 let glyphCenter = CGPoint(x: 480, y: 450)  // cropped so the "a" can only be guessed
@@ -145,6 +154,43 @@ func addGrain(to rep: NSBitmapImageRep, seed: UInt64, strength: Double = grainSt
   }
 }
 
+/// Adds coarse monochrome grain: one random value per `cell` x `cell` grid
+/// point, bilinearly interpolated in between. Coarse grain survives scaling
+/// down far better than per-pixel grain.
+func addCoarseGrain(
+  to rep: NSBitmapImageRep, seed: UInt64, cell: Int = tileGrainCell,
+  strength: Double = tileGrainStrength
+) {
+  guard let data = rep.bitmapData else { return }
+  var random = SeededRandom(state: seed)
+  // One extra grid point per axis so every pixel has four neighbours.
+  let gridW = rep.pixelsWide / cell + 2
+  let gridH = rep.pixelsHigh / cell + 2
+  var grid = [Double](repeating: 0, count: gridW * gridH)
+  for i in 0..<grid.count { grid[i] = random.grain() }
+  let bytesPerRow = rep.bytesPerRow
+  for y in 0..<rep.pixelsHigh {
+    let gy = y / cell
+    let fy = Double(y % cell) / Double(cell)
+    for x in 0..<rep.pixelsWide {
+      let i = y * bytesPerRow + x * 4
+      let alpha = data[i + 3]
+      guard alpha > 0 else { continue }
+      let gx = x / cell
+      let fx = Double(x % cell) / Double(cell)
+      let top = grid[gy * gridW + gx] * (1 - fx) + grid[gy * gridW + gx + 1] * fx
+      let bottom = grid[(gy + 1) * gridW + gx] * (1 - fx) + grid[(gy + 1) * gridW + gx + 1] * fx
+      let noise = top * (1 - fy) + bottom * fy
+      // Premultiplied colour: scale the noise by alpha so soft edges stay clean.
+      let delta = noise * strength * Double(alpha) / 255.0
+      for c in 0..<3 {
+        let value = Double(data[i + c]) + delta
+        data[i + c] = UInt8(max(0, min(Double(alpha), value)))
+      }
+    }
+  }
+}
+
 func writePNG(_ rep: NSBitmapImageRep, to url: URL) throws {
   guard let png = rep.representation(using: .png, properties: [:]) else {
     throw NSError(domain: "render-icon", code: 1)
@@ -174,8 +220,8 @@ func renderIcon() -> NSBitmapImageRep {
     tileColor.setFill()
     tile.fill()
   }
-  // Strong grain on the bare tile first; the "a" drawn next hides it.
-  addGrain(to: art, seed: 0xA5CE_0D11, strength: tileGrainStrength)
+  // Coarse grain on the bare tile first; the "a" drawn next hides it.
+  addCoarseGrain(to: art, seed: 0xA5CE_0D11)
   withContext(art) { ctx in
     // The "a" is far larger than the tile and cropped by it, so it can only
     // be guessed from its curves. White, pressed in with an inner shadow.
@@ -218,7 +264,7 @@ func renderWebIcon() -> NSBitmapImageRep {
     tileColor.setFill()
     NSRect(x: 0, y: 0, width: size, height: size).fill()
   }
-  addGrain(to: rep, seed: 0xA5CE_0D13, strength: tileGrainStrength)
+  addCoarseGrain(to: rep, seed: 0xA5CE_0D13)
   withContext(rep) { ctx in
     let a = glyphPath("a", inkHeight: glyphInkHeight, center: glyphCenter)
     fillWithInnerShadow(a, color: glyphColor, in: ctx)
