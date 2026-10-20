@@ -17,8 +17,8 @@ export interface Nutrients {
   salt?: number;
 }
 
-// The optional fields, listed once so scaling cannot forget one.
-const OPTIONAL_KEYS = [
+// The optional fields, listed once so no code (scaling, validation) can forget one.
+export const OPTIONAL_NUTRIENT_KEYS = [
   "protein",
   "carbs",
   "fat",
@@ -45,7 +45,7 @@ function isKnown(value: unknown): value is number {
 export function nutrientsForAmount(per100: Nutrients, amount: number): Nutrients {
   const factor = amount / 100;
   const result: Nutrients = { kcal: per100.kcal * factor };
-  for (const key of OPTIONAL_KEYS) {
+  for (const key of OPTIONAL_NUTRIENT_KEYS) {
     const value = per100[key];
     if (isKnown(value)) result[key] = value * factor;
   }
