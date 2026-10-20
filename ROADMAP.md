@@ -7,7 +7,8 @@ before the next one starts.
 
 - Product: a minimal calorie and nutrition tracker for everyone
 - Platform: progressive web app; iPhone first, desktop browser as dashboard
-- Data: local only (IndexedDB), no account; each device keeps its own data
+- Data: local first (IndexedDB); an optional private account without email
+  for end-to-end encrypted sync is planned (see Phase 6)
 - Stack: Vite, TypeScript, Dexie, vite-plugin-pwa, barcode-detector, Vitest,
   Playwright
 - License: MPL-2.0
@@ -43,6 +44,8 @@ before the next one starts.
 - Desktop dashboard: day and week views with simple charts
 - JSON backup (export and import), because iOS can clear web app data in rare
   cases
+- Prepare for sync: all writes go through one module; each entry records its
+  time-zone offset (for the “when you log” insight)
 
 ## Phase 4 – Online food data
 
@@ -51,19 +54,46 @@ before the next one starts.
 - Cache results on the device; show the Open Food Facts attribution
 - A setting to keep the app fully offline
 
+## Phase 5 – Insights (local)
+
+- When you log (time of day), streaks, weekly averages, days within goal
+- Computed on the device only; nothing is uploaded
+
+## Phase 6 – Account and sync
+
+> [!NOTE]
+> Proposed in [`docs/design/account-and-sync.md`](docs/design/account-and-sync.md);
+> details are still being decided.
+
+- Optional account without email: a random account key created on the device
+  (passkeys later)
+- End-to-end encrypted sync between iPhone and computer; logging still works
+  offline and syncs when a connection is back
+- Server on Cloudflare (same origin as the app): stores only encrypted data,
+  no IP addresses, no exact times; deleting the account deletes everything
+- Device list, new account key, delete account
+
+## Phase 7 – Activity imports
+
+- Strava account export (`activities.csv`, FIT/GPX) and Apple Health export,
+  read on the device; no server needed
+
+## Phase 8 – Passkeys
+
+- Sign in with a passkey; the account key stays as recovery
+
+## Phase 9 – Strava API (optional)
+
+- Stateless token proxy (the client secret lives only on the server), manual
+  import, API data deleted after 7 days and never synced, as Strava requires
+
 ## Later
 
 1. **Workout log:** exercises, sets, repetitions, weight.
-2. **Import activities, locally and without a server:** Strava account export
-   (`activities.csv`, FIT/GPX files) and the Apple Health export. The Strava
-   API stays optional: it needs a small server for the client secret, allows
-   caching for at most 7 days, forbids AI use, and limits new apps to one
-   athlete.
-3. **Full data export:** JSON and CSV.
-4. **More languages.**
-5. **App Store version** (Capacitor or Expo). Needed for Apple Health
+2. **Full data export:** JSON and CSV.
+3. **More languages.**
+4. **App Store version** (Capacitor or Expo). Needed for Apple Health
    (HealthKit) and Android Health Connect.
-6. **Fitbit through the Google Health API.** The Fitbit Web API shuts down on
-   30 October 2026. Restricted scopes, Google verification and a server are
-   required, so this has low priority.
-7. **Optional sync** between devices, end-to-end encrypted.
+5. **Fitbit through the Google Health API.** The Fitbit Web API shuts down on
+   30 October 2026. Restricted scopes and Google verification are required,
+   so this has low priority.
