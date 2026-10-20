@@ -62,8 +62,7 @@ before the next one starts.
 ## Phase 6 – Account and sync
 
 > [!NOTE]
-> Proposed in [`docs/design/account-and-sync.md`](docs/design/account-and-sync.md);
-> details are still being decided.
+> Decided; design in [`docs/design/account-and-sync.md`](docs/design/account-and-sync.md).
 
 - Optional account without email: a random account key created on the device
   (passkeys later)

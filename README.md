@@ -47,20 +47,21 @@
 
 ## Privacy
 
-| Rule                      | What it means                                                               |
-| ------------------------- | --------------------------------------------------------------------------- |
-| No telemetry              | ascend never sends usage data, crash reports or analytics.                  |
-| Your data stays with you  | Everything is stored on your device first and works without a connection.   |
-| You trigger every request | ascend contacts Open Food Facts only when you tap search or scan a barcode. |
-| Nothing from a CDN        | Fonts are system fonts; every other asset ships with the app.               |
+| Rule                            | What it means                                                                                                        |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| No telemetry                    | ascend never sends usage data, crash reports or analytics, not from the app and not from the server.                 |
+| Works offline, account optional | Everything is stored on your device first. Without an account ascend works fully offline, forever.                   |
+| An account without an email     | If you want sync (planned), ascend creates a random account key on your device. No email, no name, no phone number.  |
+| End-to-end encrypted sync       | Your data is encrypted on your device before it syncs. The server stores only data it can't read.                    |
+| Minimal server records          | The server keeps no IP addresses and no exact times. Deleting your account deletes everything on it immediately.     |
+| You trigger every request       | ascend contacts Open Food Facts or Strava only when you search, scan or import. Sync runs only after you turn it on. |
+| Nothing from a CDN              | Fonts are system fonts; every other asset ships with the app.                                                        |
 
 When you search or scan, Open Food Facts sees the search term or barcode and
-your IP address. ascend sends nothing else.
-
-The planned account follows the same idea: no email, no name, nothing about
-you. Your data is encrypted on your device before it syncs, so the server only
-stores what it can't read. The details are in
-[`docs/design/account-and-sync.md`](docs/design/account-and-sync.md).
+your IP address. ascend sends nothing else. Statistics are computed on your
+device. If you lose your account key and all your devices, nobody can recover
+your synced data, so keep the key safe and keep a JSON backup. The account
+design is in [`docs/design/account-and-sync.md`](docs/design/account-and-sync.md).
 
 ## How it's built
 
