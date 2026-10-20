@@ -1,0 +1,132 @@
+/*
+ * Base styles: a minimal reset, system fonts, colours from tokens.css and
+ * accessibility helpers. No gradients, no shadows, no web fonts.
+ * No CSS nesting: iOS Safari supports it only from 16.5, we target 16.4.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Stop iOS from enlarging text on rotation; the user's zoom still works. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-body);
+  line-height: 1.4;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+/* Form fields: at least 16 px so iOS Safari does not zoom in on focus. */
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  font-size: max(var(--font-size-input), 1em);
+  background: var(--field-bg);
+  color: var(--text);
+}
+
+a {
+  color: var(--accent);
+}
+
+/* Numbers line up in columns (e.g. kcal values in a list). */
+.num,
+data,
+time {
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Keyboard focus is always visible. :focus-visible shows the ring for
+ * keyboard users but not after a mouse click or tap.
+ */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Elements with tabindex=-1 (the page heading, <main>) get focus from script:
+ * the router after a page change, the skip link. That focus is there for
+ * screen readers, so no ring is drawn for it.
+ *
+ * Why two rules: [tabindex="-1"]:focus has a higher specificity than the
+ * plain :focus-visible rule above, so it would also remove the ring when the
+ * browser decides the focus *should* be visible (e.g. after a keyboard
+ * action). The second rule has the same specificity and comes later, so it
+ * wins in that case and brings the ring back.
+ */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+[tabindex="-1"]:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Skip link: the first thing a keyboard user reaches. Off-screen until it
+ * gets focus, then shown on top of the page.
+ */
+.skip-link {
+  position: absolute;
+  /* Below the notch / Dynamic Island on the iPhone (viewport-fit=cover). */
+  top: calc(var(--space-2) + env(safe-area-inset-top));
+  left: var(--space-2);
+  z-index: 10;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.error-message {
+  /*
+   * On wide screens #app is a two-column grid (layout.css). The error page
+   * has no navigation, so it spans both columns instead of being squeezed
+   * into the 264 px navigation column.
+   */
+  grid-column: 1 / -1;
+  padding: var(--space-5) var(--space-4);
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

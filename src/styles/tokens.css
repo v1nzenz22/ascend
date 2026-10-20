@@ -1,0 +1,108 @@
+/*
+ * Design tokens as CSS variables.
+ * Source of truth: design/tokens.json. This file is written by hand;
+ * tests/unit/tokens.test.ts checks that every colour from the JSON appears
+ * here under the expected name, so the two cannot drift apart unnoticed.
+ */
+
+:root {
+  /* Form controls and scrollbars follow the light/dark theme. */
+  color-scheme: light dark;
+
+  /* Primitive colours (color.* in tokens.json) */
+  --color-paper: #f6f5f0;
+  --color-surface: #fbfaf7;
+  --color-chrome: #efede6;
+  --color-canvas: #e7e5dd;
+  --color-ink: #151a1b;
+  --color-graphite: #5a6264;
+  --color-disabled: #b9b7ae;
+  --color-rule: #dedcd3;
+  --color-rule-soft: #eae8e1;
+  --color-mint: #a8dcd2;
+  --color-teal: #1e5c5e;
+  --color-warning: #8a5a12;
+  --color-danger: #a33a35;
+
+  /* Semantic colours, light theme (theme.light). Components use only these. */
+  --bg: var(--color-surface);
+  --nav-bg: var(--color-chrome);
+  --nav-active-bg: var(--color-surface);
+  --border: var(--color-rule);
+  --text: var(--color-ink);
+  --text-muted: var(--color-graphite);
+  --field-bg: #ffffff;
+  --focus-ring: var(--color-teal);
+  --accent: var(--color-teal);
+
+  /* Font families: system fonts only, nothing is downloaded. */
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  --font-display: "Times New Roman", Times, serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, monospace;
+
+  /*
+   * Font sizes for the phone (the default layout).
+   * Provisional, pending FigCraft review: tokens.json still has the
+   * desktop-browser sizes (body 13 px), which are too small on an iPhone.
+   * iOS uses 17 px body text, and Safari zooms into form fields under 16 px,
+   * so inputs never go below --font-size-input. Values in rem (px / 16) so
+   * they follow the user's text size setting.
+   */
+  --font-size-caption: 0.8125rem; /* 13 px */
+  --font-size-body: 1.0625rem; /* 17 px */
+  --font-size-heading: 1.25rem; /* 20 px */
+  --font-size-title: 1.75rem; /* 28 px */
+  --font-size-display: 3rem; /* 48 px */
+  --font-size-input: 1rem; /* 16 px minimum, prevents iOS zoom on focus */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Spacing (space.* in px, converted to rem by / 16) */
+  --space-1: 0.25rem; /* 4 px */
+  --space-2: 0.5rem; /* 8 px */
+  --space-3: 0.75rem; /* 12 px */
+  --space-4: 1rem; /* 16 px */
+  --space-5: 1.5rem; /* 24 px */
+  --space-6: 2rem; /* 32 px */
+  --space-7: 3rem; /* 48 px */
+
+  --radius-field: 6px;
+  --radius-button: 6px;
+  --radius-window: 10px;
+
+  --size-tab-height: 2.75rem; /* 44 px: Apple's minimum touch target */
+  --size-toolbar-height: 2.75rem; /* 44 px */
+  --size-side-panel-rail: 3rem; /* 48 px */
+  --size-side-panel: 16.5rem; /* 264 px */
+}
+
+/*
+ * Wide screens (desktop dashboard): the original tokens.json sizes.
+ * Provisional, pending FigCraft review. Inputs stay at 16 px anyway.
+ */
+@media (min-width: 60rem) {
+  :root {
+    --font-size-caption: 0.75rem; /* 12 px */
+    --font-size-body: 0.8125rem; /* 13 px */
+    --font-size-heading: 0.9375rem; /* 15 px */
+    --font-size-title: 1.75rem; /* 28 px */
+    --font-size-display: 3rem; /* 48 px */
+  }
+}
+
+/* Dark theme (theme.dark): only the semantic colours change. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141818;
+    --nav-bg: #0f1212;
+    --nav-active-bg: #1b2020;
+    --border: #2c3333;
+    --text: #eceae3;
+    --text-muted: #a3abab;
+    --field-bg: #0f1212;
+    --focus-ring: var(--color-mint);
+    --accent: var(--color-mint);
+  }
+}

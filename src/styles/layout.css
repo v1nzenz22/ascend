@@ -1,0 +1,119 @@
+/*
+ * App shell layout. One <nav> element, restyled by a media query:
+ * - phone (default): sticky header, tab bar fixed at the bottom;
+ * - wide screens (>= 60rem / 960 px): navigation as a list on the left.
+ * env(safe-area-inset-*) keeps content clear of the iPhone notch and home
+ * indicator (needs viewport-fit=cover in index.html).
+ */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: calc(var(--space-3) + env(safe-area-inset-top))
+    calc(var(--space-4) + env(safe-area-inset-right)) var(--space-3)
+    calc(var(--space-4) + env(safe-area-inset-left));
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-title {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+}
+
+.app-nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: var(--nav-bg);
+  border-top: 1px solid var(--border);
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.app-nav ul {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-nav a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-tab-height);
+  padding: var(--space-2) var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  text-align: center;
+  text-decoration: none;
+}
+
+/* Active page: background, accent colour *and* weight, never colour alone. */
+.app-nav a[aria-current="page"] {
+  background: var(--nav-active-bg);
+  color: var(--accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.app-main {
+  /* Room for the fixed tab bar plus the home indicator. */
+  padding: var(--space-4) calc(var(--space-4) + env(safe-area-inset-right))
+    calc(var(--size-tab-height) + var(--space-5) + env(safe-area-inset-bottom))
+    calc(var(--space-4) + env(safe-area-inset-left));
+}
+
+.placeholder {
+  color: var(--text-muted);
+}
+
+@media (min-width: 60rem) {
+  #app {
+    display: grid;
+    grid-template-columns: var(--size-side-panel) 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "nav header"
+      "nav main";
+    min-height: 100dvh;
+  }
+
+  .app-header {
+    grid-area: header;
+    padding: var(--space-5) var(--space-6) var(--space-4);
+  }
+
+  .app-nav {
+    grid-area: nav;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    padding: var(--space-4) var(--space-3);
+    border-top: none;
+    border-right: 1px solid var(--border);
+  }
+
+  .app-nav ul {
+    grid-template-columns: none;
+    gap: var(--space-1);
+  }
+
+  .app-nav a {
+    justify-content: flex-start;
+    min-height: auto;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-button);
+    font-size: var(--font-size-body);
+    text-align: left;
+  }
+
+  .app-main {
+    grid-area: main;
+    padding: var(--space-5) var(--space-6);
+  }
+}
