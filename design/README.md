@@ -24,8 +24,8 @@ Visual identity for ascend, the offline-first nutrition tracker. Flat colour, Ti
 
 - **Mark:** an oversized white Times New Roman “a”, cropped by a flat mint
   tile on the right and at the bottom, so you can only guess the letter from
-  its arch and bowl. An inner shadow presses it into the tile; film grain
-  sits on top.
+  its arch and bowl. An inner shadow presses it into the tile. Film grain
+  is strong on the mint and only light on the white “a”.
 - **Colour:** six flat colours, each with one job (see `tokens.json`). Paper
   and ink carry the interface. Teal marks links, focus and secure state.
   Mint appears only in the icon and selections. No gradients anywhere.
@@ -43,16 +43,17 @@ Visual identity for ascend, the offline-first nutrition tracker. Flat colour, Ti
 Earlier versions stay in [`history/`](history/), so you can see how the
 identity got here.
 
-| Version | Icon                                                         | What changed                                                                    |
-| ------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------- |
-| v0.1    | <img src="history/v0.1/ascend-icon-1024.png" width="72" alt> | Two rising chevrons on a mint-to-blue gradient. Too generic.                    |
-| v0.2    | <img src="history/v0.2/ascend-icon-1024.png" width="72" alt> | A small Times “a” with grain, still on a gradient, with stat cards in the UI.   |
-| v0.3    | <img src="history/v0.3/ascend-icon-1024.png" width="72" alt> | Flat colour, no gradients. A large ink “a”; the UI drops cards for hairlines.   |
-| v0.4    | <img src="history/v0.4/ascend-icon-1024.png" width="72" alt> | The “a” turns white, outgrows the tile and gets an inner shadow.                |
-| v0.5    | <img src="history/v0.5/ascend-icon-1024.png" width="72" alt> | Larger still and cropped at the bottom: only the arch and bowl remain. Current. |
+| Version | Icon                                                           | What changed                                                                  |
+| ------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| v0.1    | <img src="history/v0.1/ascend-icon-1024.png" width="72" alt>   | Two rising chevrons on a mint-to-blue gradient. Too generic.                  |
+| v0.2    | <img src="history/v0.2/ascend-icon-1024.png" width="72" alt>   | A small Times “a” with grain, still on a gradient, with stat cards in the UI. |
+| v0.3    | <img src="history/v0.3/ascend-icon-1024.png" width="72" alt>   | Flat colour, no gradients. A large ink “a”; the UI drops cards for hairlines. |
+| v0.4    | <img src="history/v0.4/ascend-icon-1024.png" width="72" alt>   | The “a” turns white, outgrows the tile and gets an inner shadow.              |
+| v0.5    | <img src="history/v0.5/ascend-icon-1024.png" width="72" alt>   | Larger still and cropped at the bottom: only the arch and bowl remain.        |
+| v0.5.1  | <img src="history/v0.5.1/ascend-icon-1024.png" width="72" alt> | More grain in the mint tile; the white “a” stays clean. Current.              |
 
 Window and style guide renders for v0.1 to v0.3 are in the same folders; v0.4
-and v0.5 changed only the icon.
+to v0.5.1 changed only the icon.
 
 ### Font license note
 
