@@ -6,7 +6,6 @@
 
 <p align="center">
   Track what you eat. Calories and nutrients, on your phone and your computer.<br>
-  Offline first. No account. No tracking.
 </p>
 
 > [!NOTE]
