@@ -130,7 +130,7 @@
   --accent-on: var(--color-ink);
   --accent-soft: var(--color-teal);
   --status-warning: #eceae3;
-  --status-danger: #eceae3;
+  --status-danger: #e8837c;
   --button-primary: #eceae3;
   --button-primary-pressed: #a3abab;
   --focus-ring: var(--color-mint);
@@ -154,7 +154,7 @@
     --accent-on: var(--color-ink);
     --accent-soft: var(--color-teal);
     --status-warning: #eceae3;
-    --status-danger: #eceae3;
+    --status-danger: #e8837c;
     --button-primary: #eceae3;
     --button-primary-pressed: #a3abab;
     --focus-ring: var(--color-mint);
