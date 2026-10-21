@@ -44,6 +44,25 @@ else
   echo "ok   binary"
 fi
 
+# The Cloudflare `_headers` file (generated from security.config.ts) is
+# scanned like every other file. It holds no URLs, so it passes; a URL that
+# sneaks into it (e.g. a CDN in the CSP) is caught.
+mkdir -p "$TMP/headers-ok" "$TMP/headers-cdn"
+printf "/*\n  Content-Security-Policy: default-src 'self'; frame-ancestors 'none'\n/sw.js\n  Cache-Control: no-cache\n" >"$TMP/headers-ok/_headers"
+printf "/*\n  Content-Security-Policy: script-src 'self' https://cdn.example.org\n" >"$TMP/headers-cdn/_headers"
+if bash "$CHECK" "$TMP/headers-ok" >/dev/null 2>&1; then
+  echo "ok   headers-file"
+else
+  echo "FAIL headers-file: expected pass, got fail"
+  failures=$((failures + 1))
+fi
+if bash "$CHECK" "$TMP/headers-cdn" >/dev/null 2>&1; then
+  echo "FAIL headers-file-cdn: expected fail, got pass"
+  failures=$((failures + 1))
+else
+  echo "ok   headers-file-cdn"
+fi
+
 # A missing folder is an error, not a silent pass.
 if bash "$CHECK" "$TMP/does-not-exist" >/dev/null 2>&1; then
   echo "FAIL missing-dist: expected fail, got pass"

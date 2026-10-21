@@ -10,6 +10,7 @@
 # 2. No file may mention a known tracker or CDN host, with or without "https://".
 #
 # Binary files (PNG, later wasm) are scanned too, so nothing hides in them.
+# So is the Cloudflare `_headers` file: its CSP must not name other hosts.
 set -euo pipefail
 
 # Run from the repo root, wherever the script is called from (a relative
