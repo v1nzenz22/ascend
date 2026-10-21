@@ -9,6 +9,7 @@
 import "../../styles/kit.css";
 
 import type { PageLoader } from "../../app/page";
+import { theme } from "../../app/preferences";
 import { applyTheme, type Theme } from "../../app/theme";
 import { MEALS } from "../../domain/meals";
 import { t } from "../../i18n/i18n";
@@ -244,8 +245,16 @@ function icons(): HTMLElement {
   ]);
 }
 
-const loadKitPage: PageLoader = () =>
-  Promise.resolve({
+const loadKitPage: PageLoader = ({ signal }) => {
+  // The preview theme must not outlive this page: restore the saved one.
+  signal.addEventListener(
+    "abort",
+    () => {
+      applyTheme(theme());
+    },
+    { once: true },
+  );
+  return Promise.resolve({
     title: t("kit.title"),
     subtitle: t("kit.subtitle"),
     content: el("div", { class: "kit" }, [
@@ -265,5 +274,6 @@ const loadKitPage: PageLoader = () =>
       icons(),
     ]),
   });
+};
 
 export default loadKitPage;
