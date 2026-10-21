@@ -10,3 +10,6 @@ LICENSE
 
 # Vendored third-party rule files, kept byte-identical to upstream
 .claude/skills/*/guidelines.md
+
+# Agent worktrees (separate checkouts)
+.claude/worktrees/
