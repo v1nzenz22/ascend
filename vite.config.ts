@@ -1,9 +1,12 @@
-// Vite build configuration: bundling, the PWA (manifest + service worker)
-// and the Content Security Policy for the production build.
+// Vite build configuration: bundling, the PWA (manifest + service worker),
+// the Content Security Policy and the Cloudflare Pages `_headers` file for
+// the production build. The policies themselves live in security.config.ts.
 // Unit tests have their own config (vitest.config.ts), so these plugins never
 // run during tests.
 import { defineConfig, type Plugin } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import packageJson from "./package.json" with { type: "json" };
+import { headersFile, metaContentSecurityPolicy } from "./security.config";
 import { de } from "./src/i18n/de";
 
 // The app is served from the site root. If hosting ever puts it under a
@@ -12,22 +15,6 @@ const BASE = "/";
 
 // Surface colour of the light theme (theme.light.windowBackground).
 const THEME_COLOR = "#FBFAF7";
-
-// Everything comes from our own origin: no CDN, no external fonts, no
-// trackers. Phase 4 adds the Open Food Facts host to connect-src.
-const CONTENT_SECURITY_POLICY = [
-  "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self'",
-  "img-src 'self'",
-  "font-src 'self'",
-  "connect-src 'self'",
-  "manifest-src 'self'",
-  "worker-src 'self'",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-].join("; ");
 
 /**
  * Adds the CSP as a <meta> tag, only to the production build. The dev server
@@ -44,14 +31,32 @@ function contentSecurityPolicy(): Plugin {
       if (!html.includes(charset)) {
         throw new Error(`ascend:csp: index.html must contain ${charset}`);
       }
-      const meta = `<meta http-equiv="Content-Security-Policy" content="${CONTENT_SECURITY_POLICY}" />`;
+      const meta = `<meta http-equiv="Content-Security-Policy" content="${metaContentSecurityPolicy()}" />`;
       return html.replace(charset, `${charset}\n    ${meta}`);
+    },
+  };
+}
+
+/**
+ * Writes `_headers` into dist/. Cloudflare Pages reads it and sends these
+ * HTTP headers with every file (see security.config.ts). Build only: the dev
+ * server and `vite preview` ignore the file.
+ */
+function cloudflareHeaders(): Plugin {
+  return {
+    name: "ascend:headers",
+    apply: "build",
+    generateBundle() {
+      this.emitFile({ type: "asset", fileName: "_headers", source: headersFile() });
     },
   };
 }
 
 export default defineConfig({
   base: BASE,
+  // The app version for the settings page ("ascend 0.1"). `define` replaces
+  // the name with the string literal at build time.
+  define: { __APP_VERSION__: JSON.stringify(packageJson.version) },
   // Never listen on the network: only this computer can open the app.
   server: { host: "localhost" },
   preview: { host: "localhost" },
@@ -66,13 +71,20 @@ export default defineConfig({
   },
   plugins: [
     contentSecurityPolicy(),
+    cloudflareHeaders(),
     VitePWA({
       strategies: "generateSW",
-      // New versions install in the background; the next start uses them.
-      registerType: "autoUpdate",
-      // Loads registerSW.js as an external file. "inline" would need an
-      // inline <script>, which the CSP forbids.
-      injectRegister: "script",
+      // A new version installs in the background and then waits. The app
+      // shows "Neue Version verfügbar" and the user decides when to reload
+      // (src/app/update.ts). This way a new version never replaces the old
+      // one while the user is typing.
+      registerType: "prompt",
+      // "auto": as long as no code imports `virtual:pwa-register`, the plugin
+      // adds an external registerSW.js that only registers the service
+      // worker. As soon as src/app/update.ts is imported (from main.ts), the
+      // plugin notices it and leaves the registration to update.ts. Never
+      // "inline": that would need an inline <script>, which the CSP forbids.
+      injectRegister: "auto",
       // No service worker in `npm run dev`: avoids stale caches while
       // developing. It exists only in build/preview.
       devOptions: { enabled: false },
@@ -109,11 +121,12 @@ export default defineConfig({
         globPatterns: ["**/*.{html,js,css,png,svg,wasm}"],
         navigateFallback: "index.html",
         cleanupOutdatedCaches: true,
-        // "autoUpdate" behaviour: a new service worker takes over right away
-        // instead of waiting until every tab is closed (which on an iPhone
-        // home-screen app may be never). The plugin only sets these itself
-        // for injectRegister "auto", so they are spelled out here.
-        skipWaiting: true,
+        // No skipWaiting: a new version waits until the user taps "Neu
+        // laden" (registerType "prompt").
+        // clientsClaim only matters for the very first install: the new
+        // service worker then controls the open page at once, so the app
+        // works offline right after the first visit. For an update it has no
+        // effect until the user agreed, because a waiting worker cannot claim.
         clientsClaim: true,
         // Bundle the Workbox runtime into sw.js instead of loading it as a
         // separate file.
