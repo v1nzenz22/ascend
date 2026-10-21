@@ -6,6 +6,8 @@
 // data in a session, so Firefox's permission prompt appears at a moment that
 // makes sense (see requestPersistenceOnFirstSave).
 
+import { onDataChanged } from "../db/write";
+
 export type PersistResult = "persisted" | "not-persisted" | "unsupported";
 
 /** `navigator.storage`, or undefined where the browser does not offer it. */
@@ -49,18 +51,20 @@ export async function getPersistenceStatus(): Promise<PersistResult> {
 
 /**
  * Subscribes to "data changed" events and returns an unsubscribe function.
- * `onDataChanged` from src/db/write.ts has this shape; it is passed in
- * instead of imported, so this module does not depend on the database and
- * tests can use a simple fake.
+ * Defaults to `onDataChanged` from src/db/write.ts (fires after every
+ * successful write); tests pass a simple fake instead.
  */
 export type DataChangeSubscription = (listener: () => void) => () => void;
 
 /**
  * Requests persistent storage once, after the first successful save of this
- * session. Wiring (in main.ts): `requestPersistenceOnFirstSave(onDataChanged)`.
+ * session. Wiring (in main.ts, after the database opened):
+ * `requestPersistenceOnFirstSave()`.
  * Returns a function that cancels the wait (used by tests).
  */
-export function requestPersistenceOnFirstSave(subscribe: DataChangeSubscription): () => void {
+export function requestPersistenceOnFirstSave(
+  subscribe: DataChangeSubscription = onDataChanged,
+): () => void {
   // `done` guards against a second change arriving before the listener is
   // removed, so the browser is asked at most once.
   let done = false;

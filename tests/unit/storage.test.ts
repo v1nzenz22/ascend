@@ -4,6 +4,8 @@ import {
   requestPersistenceOnFirstSave,
   requestPersistentStorage,
 } from "../../src/app/storage";
+import { saveRecord } from "../../src/db/write";
+import { resetDatabase } from "./data-helpers";
 
 /** Replaces `navigator` with one whose `storage` behaves as given. */
 function stubStorage(storage: Partial<StorageManager> | undefined): void {
@@ -151,5 +153,21 @@ describe("requestPersistenceOnFirstSave", () => {
     changes.emit();
     expect(persist).not.toHaveBeenCalled();
     expect(changes.listenerCount()).toBe(0);
+  });
+
+  test("default: asks once after the first real write through write.ts", async () => {
+    await resetDatabase();
+    const persist = vi.fn(() => Promise.resolve(true));
+    stubStorage({ persisted: () => Promise.resolve(false), persist });
+    const cancel = requestPersistenceOnFirstSave();
+    try {
+      await saveRecord("settings", { key: "theme", value: "dark" });
+      await saveRecord("settings", { key: "theme", value: "light" });
+      await vi.waitFor(() => {
+        expect(persist).toHaveBeenCalledTimes(1);
+      });
+    } finally {
+      cancel();
+    }
   });
 });
