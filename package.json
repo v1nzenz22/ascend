@@ -1,6 +1,6 @@
 {
   "name": "ascend",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "A minimal, offline-first calorie and nutrition tracker. No account, no tracking.",
   "license": "MPL-2.0",
@@ -37,10 +37,10 @@
     "vite": "8.3.4",
     "vite-plugin-pwa": "2.0.0",
     "vitest": "5.0.5",
-    "workbox-build": "7.4.1",
-    "workbox-window": "7.4.1"
+    "workbox-build": "7.4.1"
   },
   "dependencies": {
-    "dexie": "4.4.6"
+    "dexie": "4.4.6",
+    "workbox-window": "7.4.1"
   }
 }
