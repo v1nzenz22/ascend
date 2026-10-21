@@ -33,6 +33,8 @@ ALLOWED=(
   # `sips`. They are identifiers, not addresses that anything loads.
   "http://ns.adobe.com/exif/1.0/"
   "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  # SVG namespace for createElementNS in src/ui/dom.ts (identifier, never fetched).
+  "http://www.w3.org/2000/svg"
 )
 
 # Hosts that must never appear anywhere in the build (case-insensitive,
