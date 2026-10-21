@@ -15,6 +15,8 @@ export default defineConfig(
       "coverage/",
       "test-results/",
       "playwright-report/",
+      // Agent worktrees are separate checkouts with their own lint runs.
+      ".claude/worktrees/",
     ],
   },
 
