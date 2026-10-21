@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { de } from "../../src/i18n/de";
-import { interpolate, LANGUAGE, LOCALE, t } from "../../src/i18n/i18n";
+import { de, MESSAGE_FILES } from "../../src/i18n/de";
+import { interpolate, LANGUAGE, LOCALE, plural, t } from "../../src/i18n/i18n";
 
 describe("t", () => {
   test("returns the German text for a key", () => {
@@ -39,6 +39,50 @@ describe("t", () => {
     // @ts-expect-error: 'does.not.exist' is not a MessageKey
     expect(t("does.not.exist")).toBeUndefined();
   });
+});
+
+describe("message files", () => {
+  test("no key appears in two files (one would silently win)", () => {
+    const seen = new Map<string, string>();
+    const duplicates: string[] = [];
+    for (const [file, messages] of Object.entries(MESSAGE_FILES)) {
+      for (const key of Object.keys(messages)) {
+        const other = seen.get(key);
+        if (other !== undefined) duplicates.push(`${key} (${other}, ${file})`);
+        seen.set(key, file);
+      }
+    }
+    expect(duplicates).toEqual([]);
+    expect(Object.keys(de).length).toBe(seen.size);
+  });
+
+  test("the app description no longer says 'ohne Konto'", () => {
+    expect(t("app.description")).toBe(
+      "Kalorien und Nährwerte erfassen – offline und ohne Tracking.",
+    );
+  });
+
+  test("every message is a non-empty string", () => {
+    for (const value of Object.values(de)) {
+      expect(typeof value).toBe("string");
+      expect(value.trim()).not.toBe("");
+    }
+  });
+});
+
+describe("plural", () => {
+  // Real plural keys arrive with the screens; field.belowMin / aboveMax
+  // stand in as "one" / "other" texts with a placeholder.
+  const keys = { one: "field.belowMin", other: "field.aboveMax" } as const;
+
+  test("German: 1 is singular, 0 and 2+ are plural", () => {
+    expect(plural(1, keys, { min: "x" })).toBe("Bitte eine Zahl ab x eingeben.");
+    expect(plural(0, keys, { max: "y" })).toBe("Bitte eine Zahl bis y eingeben.");
+    expect(plural(6, keys, { max: "y" })).toBe("Bitte eine Zahl bis y eingeben.");
+  });
+
+  // No message uses {count} yet; the dashboard (P8) adds the first ones
+  // ("6 volle Tage") together with a test of the filled-in number.
 });
 
 describe("interpolate", () => {

@@ -1,0 +1,574 @@
+/*
+ * Shared UI components (FigCraft page "Components"). Flat colours from
+ * tokens.css only: no gradients, no shadows. No CSS nesting (iOS 16.4).
+ * State is never shown by colour alone: selected items also change weight
+ * or background, errors also show text.
+ */
+
+/* ---------- Icons ---------- */
+
+.icon {
+  flex: none;
+  width: var(--size-icon-size);
+  height: var(--size-icon-size);
+}
+
+/* ---------- Buttons ---------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-button-height);
+  padding: 0 var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-button);
+  background: transparent;
+  color: var(--text);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button--primary {
+  background: var(--button-primary);
+  color: var(--text-inverse);
+}
+
+.button--primary:active {
+  background: var(--button-primary-pressed);
+}
+
+.button--secondary {
+  background: var(--bg-surface);
+  border-color: var(--line-rule);
+}
+
+.button--secondary:active,
+.button--text:active {
+  background: var(--bg-chrome);
+}
+
+.button--text {
+  color: var(--accent);
+}
+
+.button--danger {
+  color: var(--status-danger);
+}
+
+.button:disabled {
+  background: var(--bg-chrome);
+  border-color: transparent;
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.button--text:disabled {
+  background: transparent;
+}
+
+/* Square button with only an icon (aria-label required). */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-button-height);
+  height: var(--size-button-height);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-button);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.icon-button:active {
+  background: var(--bg-chrome);
+}
+
+/* ---------- Text field (Textfeld) ---------- */
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.field__label,
+.number-field__label {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-medium);
+}
+
+.field__input {
+  width: 100%;
+  min-height: var(--size-field-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-rule);
+  border-radius: var(--radius-field);
+  background: var(--bg-field);
+  color: var(--text);
+}
+
+.field__input::placeholder,
+.number-field__input::placeholder,
+.search-field__input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* Focus: accent border in addition to the global focus ring. */
+.field__input:focus,
+.search-field__input:focus {
+  border-color: var(--accent);
+}
+
+.field__input[aria-invalid="true"] {
+  border-color: var(--status-danger);
+}
+
+.field-message {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.field-message--error {
+  color: var(--status-danger);
+}
+
+/* ---------- Number field (Zahlenfeld) ---------- */
+
+.number-field {
+  display: grid;
+  grid-template-columns: 1fr minmax(7rem, 9rem);
+  align-items: center;
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+}
+
+.number-field .field-message {
+  grid-column: 1 / -1;
+}
+
+/* The visible box; the input inside has no own border. */
+.number-field__box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--size-field-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-rule);
+  border-radius: var(--radius-field);
+  background: var(--bg-field);
+}
+
+.number-field__box:focus-within {
+  border-color: var(--accent);
+}
+
+.number-field__box:has([aria-invalid="true"]) {
+  border-color: var(--status-danger);
+}
+
+.number-field__input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The ring goes around the whole box, not only the bare input. */
+.number-field__input:focus-visible {
+  outline: none;
+}
+
+.number-field__box:has(.number-field__input:focus-visible) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.number-field__unit {
+  color: var(--text-muted);
+  font-size: var(--font-size-body);
+}
+
+/* ---------- Search field (Suchfeld) ---------- */
+
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-field__icon {
+  position: absolute;
+  left: var(--space-3);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-field__input {
+  width: 100%;
+  min-height: var(--size-field-height);
+  padding: 0 var(--space-3) 0 calc(var(--space-3) + var(--size-icon-size) + var(--space-2));
+  border: 1px solid var(--line-rule);
+  border-radius: var(--radius-field);
+  background: var(--bg-field);
+  color: var(--text);
+}
+
+/* ---------- Radio groups: chips and segments ---------- */
+
+.chips,
+.segmented {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.chips__legend,
+.segmented__legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-medium);
+}
+
+/*
+ * The radio circle is hidden but stays focusable and clickable through its
+ * label. Not display:none: that would remove it from keyboard and screen
+ * readers.
+ */
+.chips__radio,
+.segmented__radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.chips__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chips__option {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--size-chip-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-rule);
+  border-radius: calc(var(--size-chip-height) / 2);
+  background: var(--bg-surface);
+  font-size: var(--font-size-label);
+  cursor: pointer;
+}
+
+/* Selected: mint fill *and* semibold. */
+.chips__radio:checked + .chips__option {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft);
+  font-weight: var(--font-weight-semibold);
+}
+
+.segmented__options {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-button);
+  background: var(--bg-chrome);
+}
+
+.segmented__option,
+.segment-links__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--size-button-height) - 4px);
+  padding: 0 var(--space-3);
+  border-radius: calc(var(--radius-button) - 1px);
+  color: var(--text-muted);
+  font-size: var(--font-size-label);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Selected segment: raised surface, text colour *and* weight. */
+.segmented__radio:checked + .segmented__option,
+.segment-links__link[aria-current="page"] {
+  background: var(--bg-field);
+  color: var(--text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.chips__radio:focus-visible + .chips__option,
+.segmented__radio:focus-visible + .segmented__option {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.segment-links ul {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  gap: 2px;
+  margin: 0;
+  padding: 2px;
+  border-radius: var(--radius-button);
+  background: var(--bg-chrome);
+  list-style: none;
+}
+
+/* ---------- List row (Eintrag) ---------- */
+
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--size-field-height);
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  border-bottom: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--text);
+  font-size: var(--font-size-body);
+  text-align: left;
+  text-decoration: none;
+}
+
+.list-row--button,
+.list-row--link {
+  cursor: pointer;
+}
+
+.list-row--button:active,
+.list-row--link:active {
+  background: var(--bg-chrome);
+}
+
+.list-row__main {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.list-row__end {
+  display: grid;
+  justify-items: end;
+}
+
+.list-row__subtitle,
+.list-row__caption {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.list-row__chevron {
+  color: var(--text-muted);
+}
+
+/* ---------- Notice (Hinweis) ---------- */
+
+.notice {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-window);
+  background: var(--bg-chrome);
+  font-size: var(--font-size-label);
+}
+
+.notice__icon {
+  color: var(--text-muted);
+}
+
+.notice__title {
+  font-weight: var(--font-weight-medium);
+}
+
+.notice--warning .notice__title,
+.notice--warning .notice__icon {
+  color: var(--status-warning);
+}
+
+/* ---------- Empty state (Leerzustand) ---------- */
+
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-7) var(--space-4);
+  text-align: center;
+}
+
+.empty-state__mark {
+  font-family: var(--font-display);
+  font-size: var(--font-size-display);
+  line-height: 1;
+}
+
+.empty-state__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-regular);
+}
+
+.empty-state__text {
+  max-width: 22rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Toast ---------- */
+
+.toast-region {
+  position: fixed;
+  right: var(--space-4);
+  bottom: calc(var(--size-tab-bar) + var(--space-3) + env(safe-area-inset-bottom));
+  left: var(--space-4);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 30rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-window);
+  background: var(--button-primary);
+  color: var(--text-inverse);
+  font-size: var(--font-size-label);
+  pointer-events: auto;
+}
+
+.toast__text {
+  flex: 1;
+}
+
+.toast__action,
+.toast__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--size-button-height);
+  min-height: var(--size-button-height);
+  padding: 0 var(--space-2);
+  border: none;
+  border-radius: var(--radius-button);
+  background: transparent;
+  color: var(--text-inverse);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+/* The ring must show on the dark toast too. */
+.toast :focus-visible {
+  outline-color: var(--text-inverse);
+}
+
+@media (min-width: 60rem) {
+  .toast-region {
+    bottom: var(--space-5);
+    left: var(--size-side-nav);
+  }
+}
+
+/* ---------- Sheet and dialog (native <dialog>) ---------- */
+
+.sheet,
+.confirm {
+  padding: 0;
+  border: none;
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+/* ::backdrop does not inherit custom properties in Safari 16, so a literal colour. */
+.sheet::backdrop,
+.confirm::backdrop {
+  background: rgb(0 0 0 / 40%);
+}
+
+/* The sheet sits at the bottom, full width, rounded top corners. */
+.sheet {
+  width: 100%;
+  max-width: 100%;
+  margin: auto 0 0;
+  border-radius: var(--radius-window) var(--radius-window) 0 0;
+}
+
+.sheet__body,
+.confirm__body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.sheet__body {
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+}
+
+.sheet__handle {
+  justify-self: center;
+  width: 2.25rem;
+  height: 0.3125rem;
+  border-radius: 3px;
+  background: var(--line-rule);
+}
+
+.sheet__title,
+.confirm__title {
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-semibold);
+}
+
+.sheet__subtitle {
+  margin-top: calc(-1 * var(--space-2));
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.sheet__actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.confirm {
+  width: min(22rem, calc(100% - 2 * var(--space-4)));
+  border-radius: var(--radius-window);
+}
+
+.confirm__message {
+  color: var(--text-muted);
+}
+
+.confirm__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* On wide screens the sheet becomes a centred panel. */
+@media (min-width: 60rem) {
+  .sheet {
+    width: 24rem;
+    margin: auto;
+    border-radius: var(--radius-window);
+  }
+}

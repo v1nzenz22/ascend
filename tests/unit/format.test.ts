@@ -1,7 +1,9 @@
 import { describe, expect, test } from "vitest";
 import {
   formatDate,
+  formatDayShort,
   formatEnergy,
+  formatWeekday,
   formatForInput,
   formatGrams,
   formatMillilitres,
@@ -111,5 +113,18 @@ describe("formatDate", () => {
 
   test("short German date", () => {
     expect(formatDate("2026-10-20", "short")).toBe("20.10.26");
+  });
+});
+
+describe("weekday formats", () => {
+  test("formatWeekday: the today subtitle", () => {
+    expect(formatWeekday("2026-10-20")).toBe("Dienstag, 20. Oktober");
+    expect(formatWeekday("2027-01-01")).toBe("Freitag, 1. Januar");
+  });
+
+  test("formatDayShort: the week chart label", () => {
+    expect(formatDayShort("2026-10-14")).toBe("Mi 14.");
+    expect(formatDayShort("2026-10-20")).toBe("Di 20.");
+    expect(formatDayShort("2026-11-01")).toBe("So 1.");
   });
 });

@@ -23,7 +23,7 @@ interface Manifest {
   icons: ManifestIcon[];
 }
 
-/** Resolves a `{color.surface}` reference from tokens.json to its hex value. */
+/** Resolves a `{color.paper}` reference from tokens.json to its hex value. */
 function tokenColor(value: string): string {
   const reference = /^\{color\.(\w+)\}$/.exec(value);
   if (reference?.[1] === undefined) return value;
@@ -33,9 +33,9 @@ function tokenColor(value: string): string {
   return hex;
 }
 
-// The browser bar and splash colour: the window background of each theme.
-const LIGHT_SURFACE = tokenColor(tokens.theme.light.windowBackground);
-const DARK_SURFACE = tokenColor(tokens.theme.dark.windowBackground);
+// The browser bar and splash colour: the app background (bgApp) of each theme.
+const LIGHT_APP = tokenColor(tokens.theme.light.bgApp);
+const DARK_APP = tokenColor(tokens.theme.dark.bgApp);
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -56,8 +56,8 @@ test("manifest is linked, valid and its icons load", async ({ page, request }) =
   expect(manifest.lang).toBe("de");
   expect(manifest.display).toBe("standalone");
   expect(manifest.start_url).toBe("/");
-  expect(manifest.theme_color.toLowerCase()).toBe(LIGHT_SURFACE.toLowerCase());
-  expect(manifest.background_color.toLowerCase()).toBe(LIGHT_SURFACE.toLowerCase());
+  expect(manifest.theme_color.toLowerCase()).toBe(LIGHT_APP.toLowerCase());
+  expect(manifest.background_color.toLowerCase()).toBe(LIGHT_APP.toLowerCase());
 
   expect(manifest.icons.map((icon) => [icon.src, icon.sizes, icon.purpose])).toEqual([
     ["icons/icon-192.png", "192x192", "any"],
@@ -103,8 +103,8 @@ test("theme-color meta tags match the design tokens", async ({ page }) => {
   const dark = await page
     .locator('meta[name="theme-color"][media="(prefers-color-scheme: dark)"]')
     .getAttribute("content");
-  expect(light?.toLowerCase()).toBe(LIGHT_SURFACE.toLowerCase());
-  expect(dark?.toLowerCase()).toBe(DARK_SURFACE.toLowerCase());
+  expect(light?.toLowerCase()).toBe(LIGHT_APP.toLowerCase());
+  expect(dark?.toLowerCase()).toBe(DARK_APP.toLowerCase());
 });
 
 test("iOS meta tags are present", async ({ page }) => {

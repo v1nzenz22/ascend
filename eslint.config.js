@@ -51,13 +51,7 @@ export default defineConfig(
     // functions in src/db/*.ts, so every write passes src/db/write.ts.
     // Tests (tests/) may still use `db` directly to prepare data.
     files: ["src/**/*.ts"],
-    ignores: [
-      "src/db/**",
-      // Temporary: main.ts still calls `db.open()`. It switches to
-      // `openDatabase()` from src/db/lifecycle.ts in work package P2; then
-      // this line goes.
-      "src/main.ts",
-    ],
+    ignores: ["src/db/**"],
     rules: {
       "no-restricted-imports": [
         "error",

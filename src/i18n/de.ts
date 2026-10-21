@@ -5,24 +5,31 @@
 // any key that does not exist here. Future languages are typed as
 // `Record<MessageKey, string>`, so a missing translation is a type error.
 //
+// The texts live in one file per area (./messages/*.ts), so screens built in
+// parallel never edit the same file. This file only joins them. A key that
+// appears in two files would silently win here; tests/unit/i18n.test.ts
+// fails in that case.
+//
 // Placeholders look like {name} and are filled in by `t()`.
+import { add } from "./messages/add";
+import { common } from "./messages/common";
+import { dashboard } from "./messages/dashboard";
+import { goals } from "./messages/goals";
+import { kit } from "./messages/kit";
+import { settings } from "./messages/settings";
+import { today } from "./messages/today";
+
+/** Every message file, by name (used by the duplicate-key test). */
+export const MESSAGE_FILES = { common, today, add, goals, settings, dashboard, kit } as const;
 
 export const de = {
-  "app.name": "ascend",
-  "app.description": "Kalorien und Nährwerte erfassen – offline, ohne Konto, ohne Tracking.",
-  "nav.label": "Hauptnavigation",
-  "nav.today": "Heute",
-  "nav.add": "Hinzufügen",
-  "nav.goals": "Ziele",
-  "nav.settings": "Einstellungen",
-  "shell.skipToContent": "Zum Inhalt springen",
-  "placeholder.text": "Diese Seite entsteht gerade.",
-  // Shown instead of a number that is unknown or invalid (an en dash).
-  "number.unknown": "–",
-  "unit.kcal": "kcal",
-  "unit.kJ": "kJ",
-  "error.dbUnavailable":
-    "Die lokale Datenbank konnte nicht geöffnet werden. Bitte prüfe, ob dein Browser Websitedaten speichern darf, und lade die Seite neu.",
+  ...common,
+  ...today,
+  ...add,
+  ...goals,
+  ...settings,
+  ...dashboard,
+  ...kit,
 } as const;
 
 /** Every valid message key. Unknown keys fail type-checking. */

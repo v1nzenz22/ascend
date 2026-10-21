@@ -58,8 +58,35 @@ test("follows the system colour scheme", async ({ page }) => {
   const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 
   await page.emulateMedia({ colorScheme: "light" });
-  expect(await background()).toBe("rgb(251, 250, 247)"); // #FBFAF7
+  expect(await background()).toBe("rgb(246, 245, 240)"); // #F6F5F0 (paper)
 
   await page.emulateMedia({ colorScheme: "dark" });
   expect(await background()).toBe("rgb(20, 24, 24)"); // #141818
+});
+
+test("data-theme overrides the system colour scheme", async ({ page }) => {
+  const background = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  const setTheme = (theme: string | null) =>
+    page.evaluate((value) => {
+      if (value === null) document.documentElement.removeAttribute("data-theme");
+      else document.documentElement.setAttribute("data-theme", value);
+    }, theme);
+
+  await page.emulateMedia({ colorScheme: "light" });
+  await setTheme("dark");
+  expect(await background()).toBe("rgb(20, 24, 24)");
+
+  await page.emulateMedia({ colorScheme: "dark" });
+  await setTheme("light");
+  expect(await background()).toBe("rgb(246, 245, 240)");
+
+  await setTheme(null);
+  expect(await background()).toBe("rgb(20, 24, 24)");
+});
+
+test("desktop: wordmark above the navigation", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "desktop layout only");
+  const brand = page.getByRole("navigation", { name: de["nav.label"] }).locator(".app-brand");
+  await expect(brand).toBeVisible();
+  await expect(brand).toHaveText(`a${de["app.name"]}`);
 });

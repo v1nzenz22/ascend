@@ -33,3 +33,26 @@ export function t(key: MessageKey, params?: Record<string, string | number>): st
   const text: string = de[key];
   return params === undefined ? text : interpolate(text, params);
 }
+
+// Created once: building Intl objects is comparatively slow.
+const pluralRules = new Intl.PluralRules(LOCALE);
+const countFormat = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 });
+
+/**
+ * Picks the singular or plural text for `count`, e.g.
+ * `plural(6, { one: 'week.fullDay', other: 'week.fullDays' })` → "6 volle Tage".
+ *
+ * German only needs "one" and "other"; `Intl.PluralRules` decides which one
+ * applies (1 → one, 0 and 2+ → other), so the rule is not hand-written and
+ * later languages with more forms only add keys. The text can use `{count}`,
+ * which is filled in with the formatted number ("1.000"); `params` may
+ * override it or add more placeholders.
+ */
+export function plural(
+  count: number,
+  keys: { one: MessageKey; other: MessageKey },
+  params?: Record<string, string | number>,
+): string {
+  const key = pluralRules.select(count) === "one" ? keys.one : keys.other;
+  return t(key, { count: countFormat.format(count), ...params });
+}

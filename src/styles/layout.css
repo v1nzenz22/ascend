@@ -1,26 +1,87 @@
 /*
  * App shell layout. One <nav> element, restyled by a media query:
- * - phone (default): sticky header, tab bar fixed at the bottom;
- * - wide screens (>= 60rem / 960 px): navigation as a list on the left.
+ * - phone (default): tab bar fixed at the bottom, icon above label;
+ * - wide screens (>= 60rem / 960 px): a column on the left with the
+ *   wordmark and the navigation entries.
+ * The page header is part of <main> and scrolls with the page (iOS large
+ * title style, not sticky).
  * env(safe-area-inset-*) keeps content clear of the iPhone notch and home
  * indicator (needs viewport-fit=cover in index.html).
  */
 
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  padding: calc(var(--space-3) + env(safe-area-inset-top))
-    calc(var(--space-4) + env(safe-area-inset-right)) var(--space-3)
+/* ---------- Page header (Kopfzeile) ---------- */
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: calc(var(--space-4) + env(safe-area-inset-top))
+    calc(var(--space-4) + env(safe-area-inset-right)) var(--space-4)
     calc(var(--space-4) + env(safe-area-inset-left));
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
 }
 
-.app-title {
+.page-header__text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Large title in Times (Title 28). */
+.page-header__title {
+  font-family: var(--font-display);
   font-size: var(--font-size-title);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.15;
+}
+
+.page-header__subtitle {
+  margin-top: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+/* Variant with a back link: "‹ Suche" left, small title centred. */
+.page-header--back {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.page-header--back .page-header__text {
+  text-align: center;
+}
+
+.page-header--back .page-header__title {
+  font-family: var(--font-ui);
+  font-size: var(--font-size-heading);
   font-weight: var(--font-weight-semibold);
-  line-height: 1.2;
+}
+
+.page-header__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  justify-self: start;
+  min-height: var(--size-button-height);
+  color: var(--accent);
+  font-size: var(--font-size-body);
+  text-decoration: none;
+}
+
+.page-header__action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.page-content {
+  padding: 0 calc(var(--space-4) + env(safe-area-inset-right)) var(--space-5)
+    calc(var(--space-4) + env(safe-area-inset-left));
+}
+
+/* ---------- Navigation: tab bar on the phone ---------- */
+
+.app-brand {
+  /* Only in the wide layout. */
+  display: none;
 }
 
 .app-nav {
@@ -29,12 +90,12 @@
   bottom: 0;
   left: 0;
   z-index: 1;
-  background: var(--nav-bg);
-  border-top: 1px solid var(--border);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--line-rule);
   padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-.app-nav ul {
+.app-nav__list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   margin: 0;
@@ -42,78 +103,105 @@
   list-style: none;
 }
 
-.app-nav a {
+.app-nav__link {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: var(--size-tab-height);
-  padding: var(--space-2) var(--space-1);
+  gap: 2px;
+  min-height: var(--size-tab-bar);
+  padding: var(--space-1);
   color: var(--text-muted);
   font-size: var(--font-size-caption);
   text-align: center;
   text-decoration: none;
 }
 
-/* Active page: background, accent colour *and* weight, never colour alone. */
-.app-nav a[aria-current="page"] {
-  background: var(--nav-active-bg);
+/* Active page: accent colour *and* weight, never colour alone. */
+.app-nav__link[aria-current="page"] {
   color: var(--accent);
   font-weight: var(--font-weight-semibold);
 }
 
 .app-main {
   /* Room for the fixed tab bar plus the home indicator. */
-  padding: var(--space-4) calc(var(--space-4) + env(safe-area-inset-right))
-    calc(var(--size-tab-height) + var(--space-5) + env(safe-area-inset-bottom))
-    calc(var(--space-4) + env(safe-area-inset-left));
+  padding-bottom: calc(var(--size-tab-bar) + var(--space-4) + env(safe-area-inset-bottom));
 }
 
-.placeholder {
+.placeholder,
+.page-error p {
   color: var(--text-muted);
 }
+
+.page-error {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+}
+
+/* ---------- Wide screens: side navigation ---------- */
 
 @media (min-width: 60rem) {
   #app {
     display: grid;
-    grid-template-columns: var(--size-side-panel) 1fr;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "nav header"
-      "nav main";
+    grid-template-columns: var(--size-side-nav) 1fr;
     min-height: 100dvh;
   }
 
-  .app-header {
-    grid-area: header;
-    padding: var(--space-5) var(--space-6) var(--space-4);
-  }
-
   .app-nav {
-    grid-area: nav;
     position: sticky;
     top: 0;
     height: 100dvh;
-    padding: var(--space-4) var(--space-3);
+    padding: var(--space-6) var(--space-3);
+    background: var(--bg-chrome);
     border-top: none;
-    border-right: 1px solid var(--border);
+    border-right: 1px solid var(--line-rule);
   }
 
-  .app-nav ul {
+  /* Wordmark: the logo "a" in Times next to "ascend". */
+  .app-brand {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin: 0 var(--space-3) var(--space-6);
+    font-family: var(--font-display);
+    font-size: var(--font-size-title);
+    line-height: 1;
+  }
+
+  .app-nav__list {
     grid-template-columns: none;
     gap: var(--space-1);
   }
 
-  .app-nav a {
+  /* Navigationseintrag: icon left of the label. */
+  .app-nav__link {
+    flex-direction: row;
     justify-content: flex-start;
-    min-height: auto;
+    gap: var(--space-3);
+    min-height: var(--size-button-height);
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-button);
-    font-size: var(--font-size-body);
+    color: var(--text);
+    font-size: var(--font-size-heading);
     text-align: left;
   }
 
+  /* Active entry: background *and* weight. */
+  .app-nav__link[aria-current="page"] {
+    background: var(--line-soft);
+    color: var(--text);
+  }
+
   .app-main {
-    grid-area: main;
-    padding: var(--space-5) var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .page-header {
+    padding: var(--space-6) var(--space-5) var(--space-4);
+  }
+
+  .page-content {
+    padding: 0 var(--space-5) var(--space-5);
   }
 }

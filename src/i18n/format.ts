@@ -63,6 +63,16 @@ const dateFormats = {
   short: new Intl.DateTimeFormat(LOCALE, { dateStyle: "short" }),
 } as const;
 
+// "Dienstag, 20. Oktober": the subtitle of the today page.
+const weekdayFormat = new Intl.DateTimeFormat(LOCALE, {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+});
+
+// "Mi., 14." in German; formatDayShort turns the parts into "Mi 14.".
+const dayShortFormat = new Intl.DateTimeFormat(LOCALE, { weekday: "short", day: "numeric" });
+
 /** The placeholder shown instead of a number that is not finite. */
 function unknownNumber(): string {
   return t("number.unknown");
@@ -124,4 +134,24 @@ export function formatEnergy(kcal: number, unit: EnergyUnit): string {
 /** `'2026-10-20'` → `"20. Oktober 2026"` (long) or `"20.10.26"` (short). */
 export function formatDate(date: LocalDate, style: "long" | "short"): string {
   return dateFormats[style].format(parseLocalDate(date));
+}
+
+/** `'2026-10-20'` → `"Dienstag, 20. Oktober"` (no year: it is about this week). */
+export function formatWeekday(date: LocalDate): string {
+  return weekdayFormat.format(parseLocalDate(date));
+}
+
+/**
+ * `'2026-10-14'` → `"Mi 14."`: the short label under a bar of the week chart.
+ *
+ * German Intl writes "Mi., 14." – the dot and comma take room under narrow
+ * bars, and the design drops them. The parts come from Intl (so the weekday
+ * names stay correct); only the dots of the abbreviation and the separator
+ * are left out.
+ */
+export function formatDayShort(date: LocalDate): string {
+  const parts = dayShortFormat.formatToParts(parseLocalDate(date));
+  const weekday = parts.find((part) => part.type === "weekday")?.value.replace(/\.$/, "") ?? "";
+  const day = parts.find((part) => part.type === "day")?.value ?? "";
+  return `${weekday} ${day}.`;
 }

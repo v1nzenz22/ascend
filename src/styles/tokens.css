@@ -1,13 +1,21 @@
 /*
  * Design tokens as CSS variables.
- * Source of truth: design/tokens.json. This file is written by hand;
- * tests/unit/tokens.test.ts checks that every colour from the JSON appears
- * here under the expected name, so the two cannot drift apart unnoticed.
+ * Source of truth: design/tokens.json (v0.4, names as in FigCraft's "Theme"
+ * variables). This file is written by hand; tests/unit/tokens.test.ts checks
+ * that every colour, size and font size from the JSON appears here under the
+ * expected name, so the two cannot drift apart unnoticed.
+ *
+ * Light and dark (docs/design/phase-3-core.md D10):
+ * - nothing set on <html>: follow the system (the media query below);
+ * - <html data-theme="light"> or "dark": the user's choice wins.
+ * The dark values are written twice (forced dark, and system dark) because
+ * plain CSS cannot share one block between a selector and a media query.
+ * The unit test checks that both copies are identical.
  */
 
 :root {
-  /* Form controls and scrollbars follow the light/dark theme. */
-  color-scheme: light dark;
+  /* Form controls and scrollbars follow the active theme. */
+  color-scheme: light;
 
   /* Primitive colours (color.* in tokens.json) */
   --color-paper: #f6f5f0;
@@ -24,16 +32,25 @@
   --color-warning: #8a5a12;
   --color-danger: #a33a35;
 
-  /* Semantic colours, light theme (theme.light). Components use only these. */
-  --bg: var(--color-surface);
-  --nav-bg: var(--color-chrome);
-  --nav-active-bg: var(--color-surface);
-  --border: var(--color-rule);
+  /* Theme variables, light (theme.light). Components use only these. */
+  --bg-app: var(--color-paper);
+  --bg-surface: var(--color-surface);
+  --bg-chrome: var(--color-chrome);
+  --bg-field: #ffffff;
+  --line-rule: var(--color-rule);
+  --line-soft: var(--color-rule-soft);
   --text: var(--color-ink);
   --text-muted: var(--color-graphite);
-  --field-bg: #ffffff;
-  --focus-ring: var(--color-teal);
+  --text-disabled: var(--color-disabled);
+  --text-inverse: var(--color-paper);
   --accent: var(--color-teal);
+  --accent-on: var(--color-surface);
+  --accent-soft: var(--color-mint);
+  --status-warning: var(--color-warning);
+  --status-danger: var(--color-danger);
+  --button-primary: var(--color-ink);
+  --button-primary-pressed: var(--color-graphite);
+  --focus-ring: var(--color-teal);
 
   /* Font families: system fonts only, nothing is downloaded. */
   --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
@@ -41,19 +58,21 @@
   --font-mono: "SF Mono", ui-monospace, Menlo, monospace;
 
   /*
-   * Font sizes for the phone (the default layout).
-   * Provisional, pending FigCraft review: tokens.json still has the
-   * desktop-browser sizes (body 13 px), which are too small on an iPhone.
-   * iOS uses 17 px body text, and Safari zooms into form fields under 16 px,
-   * so inputs never go below --font-size-input. Values in rem (px / 16) so
-   * they follow the user's text size setting.
+   * Font sizes (FigCraft text styles), for the phone. In rem (px / 16), so
+   * they follow the user's text size setting. Body and label use the
+   * Mobile/* styles here; wide screens switch body to 13 px below.
    */
-  --font-size-caption: 0.8125rem; /* 13 px */
-  --font-size-body: 1.0625rem; /* 17 px */
-  --font-size-heading: 1.25rem; /* 20 px */
-  --font-size-title: 1.75rem; /* 28 px */
-  --font-size-display: 3rem; /* 48 px */
-  --font-size-input: 1rem; /* 16 px minimum, prevents iOS zoom on focus */
+  --font-size-caption: 0.75rem; /* 12 px, Caption */
+  --font-size-body: 0.9375rem; /* 15 px, Mobile/Body */
+  --font-size-label: 0.8125rem; /* 13 px, Mobile/Label */
+  --font-size-heading: 0.9375rem; /* 15 px, Heading */
+  --font-size-title: 1.75rem; /* 28 px, Title */
+  --font-size-display: 3rem; /* 48 px, Display */
+  --font-size-mono: 0.75rem; /* 12 px, Mono */
+  --font-size-number-lg: 2rem; /* 32 px, Number/Large */
+  --font-size-number-md: 1.25rem; /* 20 px, Number/Medium */
+  /* 16 px in every input: iOS Safari zooms into fields below 16 px. */
+  --font-size-input: 1rem;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -72,37 +91,72 @@
   --radius-button: 6px;
   --radius-window: 10px;
 
-  --size-tab-height: 2.75rem; /* 44 px: Apple's minimum touch target */
-  --size-toolbar-height: 2.75rem; /* 44 px */
-  --size-side-panel-rail: 3rem; /* 48 px */
-  --size-side-panel: 16.5rem; /* 264 px */
+  /* Sizes (size.* in tokens.json) */
+  --size-field-height: 2.75rem; /* 44 px: Apple's minimum touch target */
+  --size-button-height: 2.75rem; /* 44 px */
+  --size-chip-height: 2.25rem; /* 36 px */
+  --size-icon-size: 1.5rem; /* 24 px */
+  --size-side-nav: 16.5rem; /* 264 px */
+
+  /* Not in tokens.json: height of the phone tab bar (icon above label). */
+  --size-tab-bar: 3.5rem; /* 56 px */
 }
 
-/*
- * Wide screens (desktop dashboard): the original tokens.json sizes.
- * Provisional, pending FigCraft review. Inputs stay at 16 px anyway.
- */
+/* Wide screens (desktop dashboard): body text uses the desktop Body style. */
 @media (min-width: 60rem) {
   :root {
-    --font-size-caption: 0.75rem; /* 12 px */
-    --font-size-body: 0.8125rem; /* 13 px */
-    --font-size-heading: 0.9375rem; /* 15 px */
-    --font-size-title: 1.75rem; /* 28 px */
-    --font-size-display: 3rem; /* 48 px */
+    --font-size-body: 0.8125rem; /* 13 px, Body */
   }
 }
 
-/* Dark theme (theme.dark): only the semantic colours change. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Dark theme (theme.dark), chosen by the user. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-app: #141818;
+  --bg-surface: #1b2020;
+  --bg-chrome: #0f1212;
+  --bg-field: #0f1212;
+  --line-rule: #2c3333;
+  --line-soft: #2c3333;
+  --text: #eceae3;
+  --text-muted: #a3abab;
+  --text-disabled: var(--color-graphite);
+  --text-inverse: #141818;
+  --accent: var(--color-mint);
+  --accent-on: var(--color-ink);
+  --accent-soft: var(--color-teal);
+  --status-warning: #eceae3;
+  --status-danger: #eceae3;
+  --button-primary: #eceae3;
+  --button-primary-pressed: #a3abab;
+  --focus-ring: var(--color-mint);
+}
+
+/* Dark theme (theme.dark), following the system. Same values as above. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #141818;
-    --nav-bg: #0f1212;
-    --nav-active-bg: #1b2020;
-    --border: #2c3333;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg-app: #141818;
+    --bg-surface: #1b2020;
+    --bg-chrome: #0f1212;
+    --bg-field: #0f1212;
+    --line-rule: #2c3333;
+    --line-soft: #2c3333;
     --text: #eceae3;
     --text-muted: #a3abab;
-    --field-bg: #0f1212;
-    --focus-ring: var(--color-mint);
+    --text-disabled: var(--color-graphite);
+    --text-inverse: #141818;
     --accent: var(--color-mint);
+    --accent-on: var(--color-ink);
+    --accent-soft: var(--color-teal);
+    --status-warning: #eceae3;
+    --status-danger: #eceae3;
+    --button-primary: #eceae3;
+    --button-primary-pressed: #a3abab;
+    --focus-ring: var(--color-mint);
   }
 }

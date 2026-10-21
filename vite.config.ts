@@ -13,8 +13,8 @@ import { de } from "./src/i18n/de";
 // sub-path (e.g. /ascend/), only this value changes.
 const BASE = "/";
 
-// Surface colour of the light theme (theme.light.windowBackground).
-const THEME_COLOR = "#FBFAF7";
+// App background of the light theme (theme.light.bgApp, "paper").
+const THEME_COLOR = "#F6F5F0";
 
 /**
  * Adds the CSP as a <meta> tag, only to the production build. The dev server

@@ -6,7 +6,7 @@ import { expect, test } from "./fixtures";
 // "Today" comes last: the app starts there, and clicking the link of the
 // page you are already on changes nothing (no navigation, no focus move).
 const PAGES = [
-  { hash: "#/add", label: de["nav.add"] },
+  { hash: "#/add/search", label: de["nav.add"] },
   { hash: "#/goals", label: de["nav.goals"] },
   { hash: "#/settings", label: de["nav.settings"] },
   { hash: "#/today", label: de["nav.today"] },
@@ -126,4 +126,64 @@ test("every request goes to the app's own origin", async ({ page, externalReques
   // Give late requests (service worker, manifest, icons) a moment to start.
   await page.waitForLoadState("networkidle");
   expect(externalRequests).toEqual([]);
+});
+
+test("routes with parameters, redirects and the back header", async ({ page }) => {
+  const nav = page.getByRole("navigation", { name: de["nav.label"] });
+  const heading = page.getByRole("heading", { level: 1 });
+
+  // #/add is an alias: the address becomes #/add/search and keeps ?meal.
+  await page.goto("/#/add?meal=lunch");
+  await expect(page).toHaveURL(/#\/add\/search\?meal=lunch$/);
+  await expect(heading).toHaveText(de["nav.add"]);
+
+  // A food: back variant of the header, "Hinzufügen" stays the active tab.
+  await page.goto("/#/food/abc?meal=dinner");
+  await expect(heading).toHaveText(de["add.portionTitle"]);
+  const back = page.getByRole("link", { name: de["add.backToSearch"] });
+  await expect(back).toHaveAttribute("href", "#/add/search");
+  await expect(nav.getByRole("link", { name: de["nav.add"] })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+
+  await page.goto("/#/food/abc/edit");
+  await expect(heading).toHaveText(de["add.editFoodTitle"]);
+
+  await page.goto("/#/entry/xyz");
+  await expect(heading).toHaveText(de["add.portionTitle"]);
+  await expect(nav.getByRole("link", { name: de["nav.today"] })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+
+  // The back link of the about page leads to the settings, and focus moves
+  // to the new heading.
+  await page.goto("/#/settings/about");
+  await expect(heading).toHaveText(de["settings.aboutTitle"]);
+  await page.getByRole("main").getByRole("link", { name: de["nav.settings"] }).click();
+  await expect(page).toHaveURL(/#\/settings$/);
+  await expect(heading).toHaveText(de["nav.settings"]);
+  await expect(heading).toBeFocused();
+});
+
+test("the today page shows the weekday as subtitle", async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-20T12:00:00"));
+  await page.goto("/#/today");
+  await page.reload();
+  await expect(page.getByText("Dienstag, 20. Oktober")).toBeVisible();
+});
+
+test("nav icons are decorative; every link has a text name", async ({ page }) => {
+  const nav = page.getByRole("navigation", { name: de["nav.label"] });
+  await expect(nav.locator("svg")).toHaveCount(4);
+  for (const icon of await nav.locator("svg").all()) {
+    await expect(icon).toHaveAttribute("aria-hidden", "true");
+  }
+  await expect(nav.getByRole("link")).toHaveText([
+    de["nav.today"],
+    de["nav.add"],
+    de["nav.goals"],
+    de["nav.settings"],
+  ]);
 });
